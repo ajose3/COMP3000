@@ -1,3 +1,4 @@
 # COMP3000: Face Recognition Attendance System
 
-> Text
+> Trello Board: https://trello.com/b/ydVHgHjP/comp3000
+lol
