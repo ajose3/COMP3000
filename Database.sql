@@ -43,7 +43,81 @@ FOREIGN KEY (StudentID) REFERENCES Student(StudentID)
 ON DELETE CASCADE
 );
 
-/*Insert statement*/
-INSERT INTO dbo.Course (CourseName, CourseDescription)
-VALUES ('BSc Computer Science', 'This includes programming languages, software engineering, artificial intelligence, operating systems, cyber security, statistical and mathematical models of computation, machine learning and the theories of computation.');
 
+/* STORED PROCEDURES */
+
+
+/* Create AddCourse SP */
+CREATE PROCEDURE AddCourse
+@CourseName VARCHAR(250), 
+@CourseDescription TEXT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Course WHERE CourseName = @CourseName)
+			BEGIN
+			--an account with this email already exists
+				SELECT @ResponseMessage = 208;
+			END
+		ELSE
+			BEGIN
+				INSERT INTO Course
+				(CourseName, CourseDescription)
+				VALUES
+				(@CourseName, @CourseDescription);
+				SELECT @ResponseMessage = 200;
+			END
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @ResponseMessage = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+
+END
+GO
+
+/* Running AddCourse SP */
+DECLARE @Out as INT
+exec AddCourse @CourseName = 'Physics', @CourseDescription = 'Study astronomy', @ResponseMessage = @Out OUTPUT;
+SELECT @Out AS 'Outputmessage';
+
+
+/* Create EditCourse SP */
+CREATE PROCEDURE EditCourse
+@CourseID INT,
+@CourseName VARCHAR(250),
+@CourseDescription TEXT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+    UPDATE Course 
+    SET CourseName = @CourseName, CourseDescription = @CourseDescription WHERE CourseID = @CourseID;
+    SELECT @ResponseMessage = 200;    
+ENDND
+END
+GO
+
+/* Running EditCourse SP */
+DECLARE @Out as INT
+exec EditCourse @CourseID = 3, @CourseName = 'Chemistry', @CourseDescription = 'Study astronomy', @ResponseMessage = @Out OUTPUT;
+SELECT @Out AS 'Outputmessage';
+
+
+/* Create DeleteCourse SP */
+CREATE PROCEDURE DeleteCourse
+@CourseID INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+    DELETE FROM Course WHERE CourseID = @CourseID;
+    SELECT @ResponseMessage = 200;
+END
+GO
+
+/* Running DeleteCourse SP */
+DECLARE @Out as INT
+exec DeleteCourse @CourseID = 3, @ResponseMessage = @Out OUTPUT;
+SELECT @Out AS 'Outputmessage';
