@@ -1,4 +1,4 @@
-<h1> CREATE TABLE STATEMENTS </h1>
+/* CREATE TABLE STATEMENTS */
 
 /*Create Course table*/
 CREATE TABLE Course(
