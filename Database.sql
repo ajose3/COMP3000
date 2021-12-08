@@ -1,4 +1,4 @@
-> **CREATE TABLE STATMENTS:**
+# CREATE TABLE STATEMENTS
 
 /*Create Course table*/
 CREATE TABLE Course(
