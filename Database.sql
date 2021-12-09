@@ -121,3 +121,102 @@ GO
 DECLARE @Out as INT
 exec DeleteCourse @CourseID = 3, @ResponseMessage = @Out OUTPUT;
 SELECT @Out AS 'Outputmessage';
+
+
+/* Create AddStudent SP */
+CREATE PROCEDURE AddStudent
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@FaceIMG VARBINARY(max),
+@EmailAddress VARCHAR(320),
+@Program VARCHAR(250),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Student WHERE EmailAddress = @EmailAddress)
+			BEGIN
+			--an account with this email already exists
+				SELECT @ResponseMessage = 208;
+			END
+		ELSE
+			BEGIN
+				INSERT INTO Student
+				(FirstName, LastName, FaceIMG, EmailAddress, Program)
+				VALUES
+				(@FirstName, @LastName, @FaceIMG, @EmailAddress, @Program);
+				SELECT @ResponseMessage = 200;
+			END
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @ResponseMessage = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+
+END
+GO
+
+/* Create EditStudent SP */
+CREATE PROCEDURE EditStudent
+@StudentID INT,
+@FirstName VARCHAR(50),
+@LastName VARCHAR(50),
+@FaceIMG VARBINARY(MAX),
+@EmailAddress VARCHAR(320),
+@Program VARCHAR(250),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+    UPDATE Student 
+    SET FirstName = @FirstName, LastName = @LastName, FaceIMG = @FaceIMG, EmailAddress = @EmailAddress, Program = @Program WHERE StudentID = @StudentID;
+    SELECT @ResponseMessage = 200;    
+END
+GO
+
+/* Create DeleteStudent SP */
+CREATE PROCEDURE DeleteStudent
+@StudentID INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+    DELETE FROM Student WHERE StudentID = @StudentID;
+    SELECT @ResponseMessage = 200;
+END
+GO
+
+/* Create AddLecturer SP */
+CREATE PROCEDURE AddLecturer
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@Department VARCHAR(250),
+@Title VARCHAR(50),
+@EmailAddress VARCHAR(320),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Lecturer WHERE EmailAddress = @EmailAddress)
+			BEGIN
+			--an account with this email already exists
+				SELECT @ResponseMessage = 208;
+			END
+		ELSE
+			BEGIN
+				INSERT INTO Lecturer
+				(FirstName, LastName, Department, Title, EmailAddress)
+				VALUES
+				(@FirstName, @LastName, @Department, @Title, @EmailAddress);
+				SELECT @ResponseMessage = 200;
+			END
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @ResponseMessage = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+
+END
+GO
