@@ -1,0 +1,28 @@
+{
+  "blogs": [
+    {
+      "title": "My first blog",
+      "body": "BLOG...................",
+      "author": "mario",
+      "id": 1
+    },
+    {
+      "title": "Opening party!",
+      "body": "LOlolol.......",
+      "author": "yoshi",
+      "id": 2
+    },
+    {
+      "title": "hello again",
+      "body": "how are you.....",
+      "author": "mario",
+      "id": 5
+    },
+    {
+      "title": "the latest blog",
+      "body": "good stuff",
+      "author": "mario",
+      "id": 6
+    }
+  ]
+}
