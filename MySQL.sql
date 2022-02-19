@@ -111,3 +111,873 @@ BEGIN
 		COMMIT TRANSACTION
 END
 ;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC AddCar @Token = 'FD-48BA-8080-EE76E5F9FAEC', @RegPlate = '12345', @CarBrand = 'Volvo', @CarModel = 'XC60', @ImageUrl = 'url ;es here', @Cate;ry='SUV', @Price='10.11', @LocationOfCar = "Plymouth", @Transmission = 'Automatic', @NumOfPassengers = 5,  @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Delete Car ---
+
+CREATE PROCEDURE DeleteCar
+@Token VARCHAR(25),
+@RegPlate VARCHAR(7),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @ID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				
+				IF EXISTS (SELECT * FROM Customer WHERE CustomerID = @ID AND Admin = 1)
+					BEGIN
+						IF EXISTS(SELECT * FROM Cars WHERE RegPlate = @RegPlate)
+							BEGIN					
+								DELETE FROM Cars WHERE RegPlate = @RegPlate
+								
+								SELECT @ResponseMessage = 200;
+							END
+						ELSE
+							BEGIN
+							--car does not exist
+								SELECT @ResponseMessage = 401;
+							END
+					END
+				ELSE
+					BEGIN
+					--user not admin
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END
+
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC DeleteCar @Token = 'FD-48BA-8080-EE76E5F9FAEC', @RegPlate = '12345', @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+
+---------
+
+--- Edit Car ---
+
+CREATE PROCEDURE EditCar
+@Token VARCHAR(25),
+@RegPlate VARCHAR(7),
+@CarBrand VARCHAR(250),
+@CarModel VARCHAR(250),
+@ImageUrl TEXT,
+@Category VARCHAR(50),
+@Price MONEY,
+@LocationOfCar VARCHAR(50),
+@Transmission VARCHAR(50),
+@NumOfPassengers INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @ID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				
+				IF EXISTS (SELECT * FROM Customer WHERE CustomerID = @ID AND Admin = 1)
+					BEGIN
+						IF EXISTS(SELECT * FROM Cars WHERE RegPlate = @RegPlate)
+							BEGIN													
+								UPDATE Cars
+								SET CarBrand = @CarBrand, CarModel = @CarModel, ImageUrl = @ImageUrl, Category = @Cate;ry, Price = @Price, LocationOfCar = @LocationOfCar, NumOfPassengers = @NumOfPassengers
+								WHERE RegPlate = @RegPlate;
+								
+								SELECT @ResponseMessage = 200;
+							END
+						ELSE
+							BEGIN
+							--car does not exist
+								SELECT @ResponseMessage = 401;
+							END
+					END
+				ELSE
+					BEGIN
+					--user not admin
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END
+
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC EditCar @Token = 'FD-48BA-8080-EE76E5F9FAEC', @RegPlate = '12345', @CarBrand = 'Volvo', @CarModel = 'XC60', @ImageUrl = 'url ;es here', @Category='SUV', @Price='10.11', @LocationOfCar = "Plymouth", @Transmission = 'Automatic', @NumOfPassengers = 5,  @ResponseMessage = @Out OUTPUT;
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Validate Customer ---
+
+CREATE PROCEDURE ValidateCustomer
+@Email VARCHAR(320),
+@Password VARCHAR(50),
+@Token VARCHAR(25) OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Customer WHERE EmailAddress = @Email AND Password = @Password)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Customer WHERE EmailAddress = @Email AND Password = @Password);
+				
+				DECLARE @TheToken AS VARCHAR(50) = CONVERT(VARCHAR(30), RIGHT(NEWID(), 25));
+				
+				DECLARE @ExpiryTime AS DATETIME = (SELECT DATEADD(hour, 1, CURRENT_TIMESTAMP) AS DateAdd);
+
+				Insert INTO Sessions (CustomerID, Token, ExpiryTime) VALUES (@CustomerID, @TheToken, @ExpiryTime);
+				
+				SELECT @Token = @TheToken;
+			
+			END
+		ELSE
+			BEGIN
+				SELECT @Token = 208;
+			END
+		
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @Token = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as VARCHAR(25)
+exec ValidateCustomer @Email = 'email', @Password = 'password', @Token = @Out OUTPUT;
+SELECT @OUT AS 'Outmessage';
+
+---------
+
+--- Register Customer ---
+
+CREATE PROCEDURE RegisterCustomer
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@Age INT,
+@DrivingLicenseNumber VARCHAR(50),
+@Address TEXT,
+@PhoneNumber VARCHAR(11),
+@EmailAddress VARCHAR(320),
+@Password VARCHAR(50),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Customer WHERE EmailAddress = @EmailAddress)
+			BEGIN
+			--an account with this email already exists
+				SELECT @ResponseMessage = 208;
+			END
+		ELSE
+			BEGIN
+				INSERT INTO Customer
+				(FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password)
+				VALUES
+				(@FirstName, @LastName, @Age, @DrivingLicenseNumber, @Address, @PhoneNumber, @EmailAddress, @Password);
+				SELECT @ResponseMessage = 200;
+			END
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @ResponseMessage = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+
+END
+;
+
+
+--- how to run ----
+
+DECLARE @Out as INT
+exec RegisterCustomer @FirstName = 'bob', @LastName = 'bobby', @Age = 18, @DrivingLicenseNumber = 'ABCD1234', @Address = 'address ;es here', @PhoneNumber = '07932153300', @EmailAddress = 'email6', @Password = 'password', @ResponseMessage = @Out OUTPUT;
+SELECT @OUT AS 'Outputmessage';
+
+---------
+
+--- Edit Customer ---
+
+CREATE PROCEDURE EditCustomer
+@Token VARCHAR(25),
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@Age INT,
+@DrivingLicenseNumber VARCHAR(50),
+@Address TEXT,
+@PhoneNumber VARCHAR(11),
+@EmailAddress VARCHAR(320),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+		BEGIN
+			Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+			IF EXISTS(SELECT * FROM Customer WHERE (CustomerID != @CustomerID AND EmailAddress = @EmailAddress))
+				BEGIN
+				--an account with this email already exists
+					SELECT @ResponseMessage = 208;
+				END
+			ELSE
+				BEGIN
+					UPDATE Customer SET FirstName = @FirstName, LastName = @LastName, Age = @Age, DrivingLicenseNumber = @DrivingLicenseNumber, Address = @Address, PhoneNumber = @PhoneNumber, EmailAddress = @EmailAddress WHERE CustomerID = @CustomerID AND Admin = 0;
+					SELECT @ResponseMessage = 200;
+				END
+		END
+	ELSE
+		BEGIN
+		--customer not logged in
+			SELECT @ResponseMessage = 400;
+		END
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC EditCustomer @Token = '8E-433D-BCB4-A596E369001C', @FirstName = 'This has', @LastName = 'been changed', @Age = 19, @DrivingLicenseNumber = 'FEDAE1234', @Address = 'address ;es here', @PhoneNumber = '01454234',  @EmailAddress = 'email501', @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Customer Change Password ---
+CREATE PROCEDURE ChangePassword
+@Token VARCHAR(25),
+@NewPassword VARCHAR(50),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS(SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 0)
+					BEGIN
+						UPDATE Customer SET Password = @NewPassword WHERE CustomerID = @CustomerID AND Admin = 0;
+
+						SELECT @ResponseMessage = 200;
+					END
+				ELSE
+					BEGIN
+						--customer does not exist
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END	
+	IF @@ERROR != 0
+	BEGIN
+		SELECT @ResponseMessage = 500;
+		ROLLBACK TRANSACTION
+	END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC ChangePassword @Token = 'FD-48BA-8080-EE76E5F9FAEC', @NewPassword = 'password', @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Delete Customer ---
+
+CREATE PROCEDURE DeleteCustomer
+@Token VARCHAR(25),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+		BEGIN
+			Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+			IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 0)
+				BEGIN
+					Delete customer WHERE CustomerID = @CustomerID AND Admin = 0;
+					SELECT @ResponseMessage = 200;
+				END
+			ELSE
+				BEGIN
+					--customer does not exist or is an admin
+					SELECT @ResponseMessage = 401;
+				END
+		END
+	ELSE
+		BEGIN
+			--not logged in
+			SELECT @ResponseMessage = 402 ;
+		END
+END
+;;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC DeleteCustomer @Token = 'FD-48BA-8080-EE76E5F9FAEC', @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Get Renting ---
+
+CREATE PROCEDURE GetRenting
+@Token VARCHAR(25),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				
+				SELECT * FROM Renting INNER JOIN Cars ON Renting.RegPlate = Cars.RegPlate WHERE CustomerID = @CustomerID
+				
+				SELECT @ResponseMessage = 200;
+			END
+		ELSE
+			BEGIN
+				SELECT @ResponseMessage = 401;
+			END
+			
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC GetRenting @Token = 'FD-48BA-8080-EE76E5F9FAEC', @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Add Renting ---
+
+CREATE PROCEDURE AddRenting
+@Token VARCHAR(25),
+@RegPlate VARCHAR(7),
+@StartDate DATE,
+@EndDate DATE,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				
+				INSERT INTO Renting
+				(RegPlate, CustomerID, StartDate, EndDate)
+				VALUES
+				(@RegPlate, @CustomerID, @StartDate, @EndDate);
+				
+				SELECT @ResponseMessage = 200;
+			END
+		ELSE
+			BEGIN
+				SELECT @ResponseMessage = 401;
+			END
+			
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC AddRenting @Token = 'FD-48BA-8080-EE76E5F9FAEC', @RegPlate = '12345', @StartDate = 2021-03-21, @EndDate = 2021-04-21, @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage';
+
+---------
+
+--- Cancel Renting ---
+
+CREATE PROCEDURE CancelRenting
+@Token VARCHAR(25),
+@RentingID INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS(SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token)
+				
+				IF EXISTS(SELECT * FROM Renting WHERE RentingID = @RentingID AND CustomerID = @CustomerID)
+					BEGIN
+                            BEGIN
+                                DELETE FROM Renting WHERE RentingID = @RentingID AND CustomerID = @CustomerID
+                            END
+						
+						SELECT @ResponseMessage = 200;
+					END
+				ELSE
+					BEGIN
+					--order does not exist
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END
+
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT; 
+EXEC CancelOrder @Token = 'D1-46D3-953F-D28AD246A235', @RentingID = 1, @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage'; 
+
+
+---------
+
+--- Register Admin ---
+
+CREATE PROCEDURE RegisterAdmin
+@Token VARCHAR(25),
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@Age INT,
+@DrivingLicenseNumber VARCHAR(50),
+@Address TEXT,
+@PhoneNumber VARCHAR(11),
+@EmailAddress VARCHAR(320),
+@Password VARCHAR(50),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime);
+				IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 1)
+					BEGIN
+						IF EXISTS (SELECT * FROM Customer WHERE EmailAddress = @EmailAddress)
+							BEGIN
+							--an account with this email already exists
+								SELECT @ResponseMessage = 208;
+							END
+						ELSE
+							BEGIN
+								INSERT INTO Customer
+								(FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password, Admin)
+								VALUES
+								(@FirstName, @LastName, @Age, @DrivingLicenseNumber, @Address, @PhoneNumber, @EmailAddress, @Password, 1);
+								SELECT @ResponseMessage = 200;
+							END
+					END
+				ELSE
+					BEGIN
+						--not admin
+						SELECT ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+				--not logged in
+				SELECT @ResponseMessage = 400;
+			END
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @ResponseMessage = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as INT
+exec RegisterAdmin @Token = 'FD-48BA-8080-EE76E5F9FAEC', @FirstName = 'bob', @LastName = 'bobby', @Age = 22, @DrivingLicenseNumber = '45632', @Address = 'address ;es here', @PhoneNumber = '07932153300', @EmailAddress = 'email3@admin.com', @Password = 'password', @success = @Out OUTPUT;
+SELECT @OUT AS 'Outputmessage';
+
+---------
+
+--- Validate Admin ---
+
+CREATE PROCEDURE ValidateAdmin
+@Email VARCHAR(320),
+@Password VARCHAR(50),
+@Token VARCHAR(25) OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Customer WHERE EmailAddress = @Email AND Password = @Password AND Admin = 1)
+			BEGIN
+				DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Customer WHERE EmailAddress = @Email AND Password = @Password AND Admin = 1);
+				
+				DECLARE @TheToken AS VARCHAR(50) = CONVERT(VARCHAR(30), RIGHT(NEWID(), 25));
+				
+				DECLARE @ExpiryTime AS DATETIME = (SELECT DATEADD(hour, 1, CURRENT_TIMESTAMP) AS DateAdd);
+
+				Insert INTO Sessions (CustomerID, Token, ExpiryTime) VALUES (@CustomerID, @TheToken, @ExpiryTime);
+				
+				SELECT @Token = @TheToken;
+			
+			END
+		ELSE
+			BEGIN
+				SELECT @Token = 208;
+			END
+		
+		IF @@ERROR != 0
+			BEGIN
+				SELECT @Token = 500;
+				ROLLBACK TRANSACTION
+			END
+		ELSE
+			COMMIT TRANSACTION
+END
+;
+
+--- how to run ----
+
+DECLARE @Out as VARCHAR(25); 
+EXEC ValidateAdmin @Email = 'Email@Admin.com', @Password = 'password', @Token = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage'; 
+
+---------
+
+--- Delete Admin ---
+
+CREATE PROCEDURE DeleteAdmin
+@Token VARCHAR(25),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+		BEGIN
+			Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+			IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 1)
+				BEGIN
+					Delete customer WHERE CustomerID = @CustomerID AND Admin = 1;
+					SELECT @ResponseMessage = 200;
+				END
+			ELSE
+				BEGIN
+					--customer does not exist or is an admin
+					SELECT @ResponseMessage = 401;
+				END
+		END
+	ELSE
+		BEGIN
+			--not logged in
+			SELECT @ResponseMessage = 402 ;
+		END
+END
+;
+
+------------------
+
+--- Change Admin Password ---
+
+CREATE PROCEDURE ChangeAdminPassword
+@Token VARCHAR(25),
+@NewPassword VARCHAR(50),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS(SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 1)
+					BEGIN
+						UPDATE Customer SET Password = @NewPassword WHERE CustomerID = @CustomerID AND Admin = 1;
+
+						SELECT @ResponseMessage = 200;
+					END
+				ELSE
+					BEGIN
+						--customer does not exist
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END	
+	IF @@ERROR != 0
+	BEGIN
+		SELECT @ResponseMessage = 500;
+		ROLLBACK TRANSACTION
+	END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+------------------
+
+--- Edit Admin ---
+
+CREATE PROCEDURE EditAdmin
+@Token VARCHAR(25),
+@FirstName VARCHAR(50), 
+@LastName VARCHAR(50),
+@Age INT,
+@DrivingLicenseNumber VARCHAR(50),
+@Address TEXT,
+@PhoneNumber VARCHAR(11),
+@EmailAddress VARCHAR(320),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+		BEGIN
+			Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+			IF EXISTS (SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 1)
+				BEGIN
+					IF EXISTS(SELECT * FROM Customer WHERE (CustomerID != @CustomerID AND EmailAddress = @EmailAddress))
+						BEGIN
+						--an account with this email already exists
+							SELECT @ResponseMessage = 208;
+						END
+					ELSE
+						BEGIN
+							UPDATE Customer SET FirstName = @FirstName, LastName = @LastName, Age = @Age, DrivingLicenseNumber = @DrivingLicenseNumber, Address = @Address, PhoneNumber = @PhoneNumber, EmailAddress = @EmailAddress WHERE CustomerID = @CustomerID;
+							SELECT @ResponseMessage = 200;
+						END
+				END		
+			ELSE
+				BEGIN
+					-- user not admin
+					SELECT @ResponseMessage = 401
+				END	
+		END
+	ELSE
+		BEGIN
+		--customer not logged in
+			SELECT @ResponseMessage = 400;
+		END
+END
+;
+
+
+------------------
+
+--- Admin Delete Customer ---
+
+CREATE PROCEDURE AdminDeleteCustomer
+@Token VARCHAR(25),
+@CustomerDeletingID INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS (SELECT CustomerID FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				Declare @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+				IF EXISTS(SELECT * FROM Customer WHERE CustomerID = @CustomerID AND Admin = 1)
+					BEGIN
+						Delete Customer WHERE CustomerID = @CustomerDeletingID AND Admin = 0;
+						SELECT @ResponseMessage = 200;
+					END
+				ELSE
+					BEGIN
+						SELECT @ResponseMessage = 401;
+					END
+			END
+		ELSE
+			BEGIN
+				SELECT @ResponseMessage = 400;
+			END
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+------------------
+
+--- Cancel Renting as Admin ---
+
+CREATE PROCEDURE CancelRentingAdmin
+@Token VARCHAR(25),
+@RentingID INT,
+@CustomerID INT,
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+	BEGIN TRANSACTION
+		IF EXISTS(SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+			BEGIN
+				DECLARE @AdminID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token)
+				
+				IF EXISTS(SELECT * FROM Customer WHERE @AdminID = CustomerID AND Admin=1)
+				
+				BEGIN
+				
+				IF EXISTS(SELECT * FROM Renting WHERE RentingID = @RentingID AND CustomerID = @CustomerID)
+					BEGIN
+						DELETE FROM Renting WHERE RentingID = @RentingID AND CustomerID = @CustomerID
+						SELECT @ResponseMessage = 200;
+					END
+				ELSE
+					BEGIN
+					--order does not exist
+						SELECT @ResponseMessage = 401;
+					END
+				END
+				
+				ELSE 
+					BEGIN
+					
+					SELECT @ResponseMessage = 401;
+					
+					END
+			END
+		ELSE
+			BEGIN
+			--user not logged in
+				SELECT @ResponseMessage = 400;
+			END
+
+	IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+------------------
+
+--- how to run ---
+
+DECLARE @Out as INT; 
+EXEC CancelOrderAdmin @Token = 'D1-46D3-953F-D28AD246A235', @RentingID = 1, @CustomerID = 1, @ResponseMessage = @Out OUTPUT; 
+SELECT @Out AS 'OutputMessage'; 
+
+------------------
+
+--- Get Customer Details ---
+
+CREATE PROCEDURE GetCustomerDetails
+@Token VARCHAR(25)
+AS
+BEGIN
+	IF EXISTS(SELECT * FROM Sessions WHERE Token = @Token AND CURRENT_TIMESTAMP <= ExpiryTime)
+		BEGIN
+			DECLARE @CustomerID AS INT = (SELECT CustomerID FROM Sessions WHERE Token = @Token);
+			SELECT * FROM Customer WHERE CustomerID = @CustomerID;
+		END
+END
+;
+
+------------------
+
+--- Logout ---
+
+CREATE PROCEDURE Lo;ut
+@Token VARCHAR(25),
+@ResponseMessage INT OUTPUT
+AS
+BEGIN
+    BEGIN TRANSACTION
+		IF EXISTS (SELECT * FROM Sessions WHERE Token = @Token)
+            BEGIN
+                DELETE FROM dbo.Sessions WHERE Token = @Token
+                
+                --- Success
+                SELECT @ResponseMessage = 200;
+            END
+        ELSE
+            BEGIN
+                
+                ---Token does not exist
+                SELECT @ResponseMessage = 401;
+            
+            END
+    IF @@ERROR != 0
+		BEGIN
+			SELECT @ResponseMessage = 500;
+			ROLLBACK TRANSACTION
+		END
+	ELSE
+		COMMIT TRANSACTION
+END
+;
+
+
+
