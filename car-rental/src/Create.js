@@ -5,7 +5,7 @@ const Create = () => {
    
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [author, setAuthor] = useState('yoshi');
+    const [author, setAuthor] = useState('unavailable');
     const [isPending, setIsPending] = useState(false);
     const history = useHistory();
 
@@ -29,31 +29,31 @@ const Create = () => {
     
     return (
         <div className="create">
-            <h2>Add a new blog</h2>
+            <h2>Add a new car</h2>
             <form onSubmit={handleSubmit}>
-                <label>Blog title:</label>
+                <label>Car:</label>
                 <input 
                     type="text"
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                <label>Blog body:</label>
+                <label>Number of seats:</label>
                 <textarea
                     required
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
                 ></textarea>
-                <label>Blog author:</label>
+                <label>Status:</label>
                 <select
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
                 >
-                    <option value="mario">mario</option>
-                    <option value="yoshi">yoshi</option>
+                    <option value="available">available</option>
+                    <option value="unavailable">unavailable</option>
                 </select>
-                { !isPending && <button>Add Blog</button> }
-                { isPending && <button disabled>Adding Blog...</button> }
+                { !isPending && <button>Add Car</button> }
+                { isPending && <button disabled>Adding Car...</button> }
             </form>
         </div>
     );

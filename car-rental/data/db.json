@@ -1,27 +1,27 @@
 {
   "blogs": [
     {
-      "title": "My first blog",
-      "body": "BLOG...................",
-      "author": "mario",
+      "title": "Volvo XC90",
+      "body": "5 seater",
+      "author": "available",
       "id": 1
     },
     {
-      "title": "Opening party!",
-      "body": "LOlolol.......",
-      "author": "yoshi",
+      "title": "Audi Q7",
+      "body": "7 seater",
+      "author": "available",
       "id": 2
     },
     {
-      "title": "hello again",
-      "body": "how are you.....",
-      "author": "mario",
+      "title": "BMW M4",
+      "body": "4 seater",
+      "author": "available",
       "id": 5
     },
     {
-      "title": "the latest blog",
-      "body": "good stuff",
-      "author": "mario",
+      "title": "Mercedes C Class",
+      "body": "5 seater",
+      "author": "available",
       "id": 6
     }
   ]

@@ -5,6 +5,8 @@ import Create from './Create';
 import BlogDetails from './BlogDetails';
 import NotFound from './NotFound';
 import Login from './pages/Login';
+import Payment from './pages/Payment';
+import SignUp from './pages/SignUp';
 
 
 // To start json server, type in terminal: " npx json-server --watch data/db.json --port 8000 "
@@ -23,6 +25,12 @@ function App() {
             </Route>
             <Route exact path="/login">
               <Login />
+            </Route>
+            <Route exact path="/sign-up">
+              <SignUp />
+            </Route>
+            <Route exact path="/payment">
+              <Payment />
             </Route>
             <Route path="/create">
               <Create />

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Login = () => {
     
     
@@ -10,10 +12,14 @@ const Login = () => {
                 required
                 />
                 <label>Password:</label>
-                <input type="text" 
+                <input type="password" 
                 required
                 />
                 <button>Login</button>
+                <br /><br />
+                <br /><br />
+                <label className="newAccount">Don't have an account? Create one following the link below</label>
+                <Link to="sign-up">Sign Up</Link>
             </form>
         </div>
     );
