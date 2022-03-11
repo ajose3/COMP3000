@@ -48,6 +48,10 @@ ON DELETE CASCADE
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+INSERT INTO CUSTOMER
+
+CALL insertCustomer('John', 'Doe', 18, 'Address is here', 'ASD1827301', '07834531223', 'johndoe@email.com', 'password')
+
 /* CREATE STORED PROCEDURES STATEMENTS */
 
 --- Add Car ----
