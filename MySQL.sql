@@ -25,6 +25,19 @@ Password VARCHAR(50) NOT NULL CHECK (LENGTH(Password) > 5),
 Admin TINYINT DEFAULT 0 NOT NULL
 );
 
+DELIMITER //
+
+  CREATE PROCEDURE registerCustomer(IN firstName VARCHAR(50), IN lastName VARCHAR(50), IN emailAddress VARCHAR(320), IN password VARCHAR(50))
+  
+  BEGIN 
+     
+     INSERT INTO customer(FirstName, LastName, EmailAddress, Password) VALUES (firstName, lastName, emailAddress, password);
+  
+  END //
+  
+DELIMITER ;
+
+
 CREATE TABLE Sessions(
 Session_ID int AUTO_INCREMENT PRIMARY KEY,
 CustomerID int NOT NULL,
