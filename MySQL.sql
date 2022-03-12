@@ -4,12 +4,12 @@ CREATE TABLE Cars(
 RegPlate VARCHAR(7) PRIMARY KEY NOT NULL,
 CarBrand VARCHAR(250) NOT NULL,
 CarModel VARCHAR(250) NOT NULL,
-ImageUrl TEXT,
-Category VARCHAR(50) NOT NULL,
-Price MONEY NOT NULL,
-LocationOfCar VARCHAR(50) NOT NULL,
-Transmission VARCHAR(50) NOT NULL,
-NumOfPassengers INT NOT NULL
+ImageUrl LONGTEXT,
+Category VARCHAR(50),
+Price DECIMAL(15,4),
+LocationOfCar VARCHAR(50),
+Transmission VARCHAR(50),
+NumOfPassengers INT
 );
 
 CREATE TABLE Customer(
