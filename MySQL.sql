@@ -12,6 +12,8 @@ Transmission VARCHAR(50),
 NumOfPassengers INT
 );
 
+INSERT INTO `cars`(`RegPlate`, `CarBrand`, `CarModel`, `ImageUrl`, `Category`, `Price`, `LocationOfCar`, `Transmission`, `NumOfPassengers`) VALUES ('AB15CDE','Volvo','XC60','https://www.google.co.uk/search?q=volvo+xc60&hl=en-GB&tbm=isch&source=hp&biw=1536&bih=754&ei=Gg4tYs_tCfXB8gL29JuAAQ&iflsig=AHkkrS4AAAAAYi0cKg16JHxGUyCoiqFEQqpgq7PGBWAh&oq=volvo&gs_lcp=CgNpbWcQAxgCMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzoFCAAQgARQAFioBGDFEGgAcAB4AIABSIgBuAKSAQE1mAEAoAEBqgELZ3dzLXdpei1pbWc&sclient=img#imgrc=IoqCY8_3TjwgIM','SUV',70.00,'Plymouth','Automatic',5)
+
 CREATE TABLE Customer(
 CustomerID int AUTO_INCREMENT PRIMARY KEY,
 FirstName VARCHAR(50) NOT NULL,
