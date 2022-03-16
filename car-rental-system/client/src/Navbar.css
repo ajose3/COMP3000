@@ -1,0 +1,30 @@
+.navbar {
+    justify-content: space-between;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    background-color: #202020;
+    border-bottom: 3px solid #8C38FF;
+  }
+  .navbar h1{
+    color: #FFF;
+    font-size: 28px;
+    font: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .navbar .links {
+    margin-left: auto;
+  }
+  .navbar a {
+    color: #FFF;
+    font-weight: 1000;
+    text-decoration: none;
+    transition: 0.4s;
+    padding: 8px 16px;
+    border-radius: 99px;
+  }
+  .navbar a:hover {
+    background-color: #8C38FF;
+  }

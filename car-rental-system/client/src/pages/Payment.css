@@ -1,0 +1,20 @@
+.payment {
+    max-width: 1000px;
+  }
+  .payment label {
+    text-align: left;
+    display: block;
+  }
+  .payment h2 {
+    font-size: 20px;
+    color: #f1356d;
+    margin-bottom: 30px;
+  }
+  .payment input, .payment select {
+    width: 60%;
+    padding: 6px 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: inlineblock;
+  }
