@@ -4,13 +4,15 @@ CREATE TABLE Cars(
 RegPlate VARCHAR(7) PRIMARY KEY NOT NULL,
 CarBrand VARCHAR(250) NOT NULL,
 CarModel VARCHAR(250) NOT NULL,
-ImageUrl TEXT,
-Category VARCHAR(50) NOT NULL,
-Price MONEY NOT NULL,
-LocationOfCar VARCHAR(50) NOT NULL,
-Transmission VARCHAR(50) NOT NULL,
-NumOfPassengers INT NOT NULL
+ImageUrl LONGTEXT,
+Category VARCHAR(50),
+Price DECIMAL(15,4),
+LocationOfCar VARCHAR(50),
+Transmission VARCHAR(50),
+NumOfPassengers INT
 );
+
+INSERT INTO `cars`(`RegPlate`, `CarBrand`, `CarModel`, `ImageUrl`, `Category`, `Price`, `LocationOfCar`, `Transmission`, `NumOfPassengers`) VALUES ('AB15CDE','Volvo','XC60','https://www.google.co.uk/search?q=volvo+xc60&hl=en-GB&tbm=isch&source=hp&biw=1536&bih=754&ei=Gg4tYs_tCfXB8gL29JuAAQ&iflsig=AHkkrS4AAAAAYi0cKg16JHxGUyCoiqFEQqpgq7PGBWAh&oq=volvo&gs_lcp=CgNpbWcQAxgCMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzIICAAQgAQQsQMyCAgAEIAEELEDMggIABCABBCxAzoFCAAQgARQAFioBGDFEGgAcAB4AIABSIgBuAKSAQE1mAEAoAEBqgELZ3dzLXdpei1pbWc&sclient=img#imgrc=IoqCY8_3TjwgIM','SUV',70.00,'Plymouth','Automatic',5)
 
 CREATE TABLE Customer(
 CustomerID int AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +26,26 @@ EmailAddress VARCHAR(320) NOT NULL,
 Password VARCHAR(50) NOT NULL CHECK (LENGTH(Password) > 5),
 Admin TINYINT DEFAULT 0 NOT NULL
 );
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+  CREATE PROCEDURE registerCustomer(IN firstName VARCHAR(50), IN lastName VARCHAR(50), IN emailAddress VARCHAR(320), IN password VARCHAR(50))
+  
+  BEGIN 
+     
+     INSERT INTO customer(FirstName, LastName, EmailAddress, Password) VALUES (firstName, lastName, emailAddress, password);
+  
+  END //
+  
+DELIMITER ;
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+CALL registerCustomer('john', 'doe', 'johndoe@gmail.com', 'password');
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE Sessions(
 Session_ID int AUTO_INCREMENT PRIMARY KEY,
@@ -47,6 +69,10 @@ ON DELETE CASCADE
 );
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO CUSTOMER
+
+CALL insertCustomer('John', 'Doe', 18, 'Address is here', 'ASD1827301', '07834531223', 'johndoe@email.com', 'password')
 
 /* CREATE STORED PROCEDURES STATEMENTS */
 
