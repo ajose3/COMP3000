@@ -1,0 +1,16 @@
+.view-single-car button {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-image: linear-gradient(to right, #FFCE00, #FFCE00 50%, #FE4880);
+    background-size: 200%;
+    background-position: 0%;
+    transition: 0.4s;
+    color: #FFF;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.view-single-car button:hover {
+    background-position: 100% 0%;
+}

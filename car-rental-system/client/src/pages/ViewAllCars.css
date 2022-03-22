@@ -1,0 +1,38 @@
+.car-preview {
+    padding: 10px;
+    margin: 20px 0;
+    border-bottom: 1px solid #fafafa;
+}
+
+.car-preview:hover {
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+}
+
+.car-preview h2 {
+    font-size: 20px;
+    color: #f1356d;
+    margin-bottom: 8px;
+}
+
+.home {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+.home button {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-image: linear-gradient(to right, #FFCE00, #FFCE00 50%, #FE4880);
+    background-size: 200%;
+    background-position: 0%;
+    transition: 0.4s;
+    color: #FFF;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.home button:hover {
+    background-position: 100% 0%;
+}

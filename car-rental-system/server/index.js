@@ -71,7 +71,7 @@ app.put("/api/update/:id", (req, res) => {
     });
 });
 
-// Insert into customer database
+// Register into customer database (Customer interface)
 
 app.post("/api/postcustomer", (req, res) => {
     const { firstName, lastName, age, email, password } = req.body;
@@ -83,7 +83,7 @@ app.post("/api/postcustomer", (req, res) => {
     });
 });
 
-// Get Customer data for Admin
+// Get Customer data for Admin (Admin interface)
 
 app.get("/api/getcustomer", (req, res) => {
     const sqlGetCustomer = "SELECT CustomerID, FirstName, LastName, EmailAddress FROM customer";
@@ -92,6 +92,64 @@ app.get("/api/getcustomer", (req, res) => {
     });  
 });
 
+// Add customer by Admin (Admin interface) 
+
+app.post("/api/adminaddcustomer", (req, res) => {
+    const { FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password } = req.body;
+    const sqlAdminAddCustomer = "INSERT INTO customer (FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sqlAdminAddCustomer, [FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password], (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+    });
+});
+
+// Delete customer by Admin (Admin interface)
+
+app.delete("/api/admindeletecustomer/:CustomerID", (req, res) => {
+    const { CustomerID } = req.params;
+    const sqlAdminDeleteCustomer = "DELETE FROM customer WHERE CustomerID = ?";
+    db.query(sqlAdminDeleteCustomer, CustomerID, (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+    });
+});
+
+// View single customer by Admin (Admin interface)  **NEED TO FIX
+
+app.get("/api/getcustomer/:CustomerID", (req, res) => {
+    const { CustomerID } = req.params;
+    const sqlAdminGetCustomer = "SELECT * FROM customer WHERE CustomerID = ?";
+    db.query(sqlAdminGetCustomer, CustomerID, (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+        res.send(result);
+    });
+});
+
+
+// View all cars for car
+app.get("/api/getallcars", (req, res) => {
+    const sqlGetAllCars = "SELECT * FROM cars";
+    db.query(sqlGetAllCars, (error, result) => {
+        res.send(result);
+    });  
+});
+
+
+// View single car for customer
+app.get("/api/getcar/:RegPlate", (req, res) => {
+    const { RegPlate } = req.params;
+    const sqlGetCar = "SELECT * FROM cars WHERE RegPlate = ?";
+    db.query(sqlGetCar, RegPlate, (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+        res.send(result);
+    });
+});
 
 app.get("/", (req, res) => {
 //     const sqlInsert = "INSERT INTO contact_db (name, email, contact) VALUES ('john doe', 'johndoe@gmail.com', 34534123124)";

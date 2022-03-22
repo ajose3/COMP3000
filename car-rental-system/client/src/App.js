@@ -15,6 +15,10 @@ import Payment from './pages/Payment';
 import AddEditCar from './AddEditCar';
 import Register from './pages/Register';
 import AdminCustomer from './pages/AdminCustomer';
+import AdminAddEditCustomer from './pages/AdminAddEditCustomer';
+import ViewAllCars from './pages/ViewAllCars';
+import ViewCar from './pages/ViewCar';
+import AdminViewCustomer from './pages/AdminViewCustomer';
 
 // To run front end, first "cd client", then "npm start"
 
@@ -42,7 +46,12 @@ function App() {
           <Route exact path="/payment" component={Payment} />
           <Route exact path="/create" component={AddEditCar}/>
           <Route exact path="/registercustomer" component={Register} />
+          <Route exact path="/viewallcars" component={ViewAllCars} />
+          <Route exact path="/viewcar/:RegPlate" component={ViewCar} />
+          
           <Route exact path="/admincustomer" component={AdminCustomer} />
+          <Route exact path="/adminAddEditCustomer" component={AdminAddEditCustomer} />
+          <Route exact path="/adminViewCustomer" component={AdminViewCustomer} />
         </Switch>
       </div>
     </BrowserRouter>
