@@ -27,6 +27,8 @@ Password VARCHAR(50) NOT NULL CHECK (LENGTH(Password) > 5),
 Admin TINYINT DEFAULT 0 NOT NULL
 );
 
+INSERT INTO customer (FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password) VALUES ('Steve', 'Rogers', 20, 'ABCD123', 'New York', '0213234123', 'steveroger@email.com', 'password')
+
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
 DELIMITER //
