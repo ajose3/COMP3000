@@ -50,8 +50,9 @@ function App() {
           <Route exact path="/viewcar/:RegPlate" component={ViewCar} />
           
           <Route exact path="/admincustomer" component={AdminCustomer} />
-          <Route exact path="/adminAddEditCustomer" component={AdminAddEditCustomer} />
-          <Route exact path="/adminViewCustomer" component={AdminViewCustomer} />
+          <Route exact path="/adminAddCustomer" component={AdminAddEditCustomer} />
+          <Route exact path="/adminUpdateCustomer/:CustomerID" component={AdminAddEditCustomer} />
+          <Route exact path="/adminViewCustomer/:CustomerID" component={AdminViewCustomer} />
         </Switch>
       </div>
     </BrowserRouter>

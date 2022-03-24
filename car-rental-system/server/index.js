@@ -116,12 +116,40 @@ app.delete("/api/admindeletecustomer/:CustomerID", (req, res) => {
     });
 });
 
-// View single customer by Admin (Admin interface)  **NEED TO FIX
+// View single customer by Admin (Admin interface)  
 
-app.get("/api/getcustomer/:CustomerID", (req, res) => {
+app.get("/api/adminviewcustomer/:CustomerID", (req, res) => {
     const { CustomerID } = req.params;
     const sqlAdminGetCustomer = "SELECT * FROM customer WHERE CustomerID = ?";
     db.query(sqlAdminGetCustomer, CustomerID, (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+        res.send(result);
+    });
+});
+
+// View customer for edit by Admin (Admin interface)
+
+app.get("/api/admingetcustomerupdate/:CustomerID", (req, res) => {
+    const { CustomerID } = req.params;
+    const sqlGetCustomerForAdmin = "SELECT * FROM customer WHERE CustomerID = ?";
+    db.query(sqlGetCustomerForAdmin, CustomerID, (error, result) => {
+        if(error) {
+            console.log(error);
+        }
+        res.send(result);
+    });
+});
+
+
+// Update Customer by Admin (Admin interface)
+
+app.put("/api/adminUpdateCustomer/:CustomerID", (req, res) => {
+    const { CustomerID } = req.params;
+    const {FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password} = req.body;
+    const sqlAdminUpdateCustomer = "UPDATE customer SET FirstName = ?, LastName = ?, Age = ?, DrivingLicenseNumber = ?, Address = ?, PhoneNumber = ?, EmailAddress = ?, Password = ? WHERE CustomerID = ?";
+    db.query(sqlAdminUpdateCustomer, [FirstName, LastName, Age, DrivingLicenseNumber, Address, PhoneNumber, EmailAddress, Password, CustomerID], (error, result) => {
         if(error) {
             console.log(error);
         }

@@ -23,12 +23,22 @@ const AdminAddEditCustomer = () => {
 
   const history = useHistory();
 
+  const {CustomerID} = useParams(); 
+
+  useEffect(() => {
+    axios
+    .get(`http://localhost:5000/api/admingetcustomerupdate/${CustomerID}`)
+    .then((resp => setState({...resp.data[0] })))
+  }, [CustomerID]); // Only runs when we have the id so the edit runs here
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if(!FirstName || !LastName || !Age || !DrivingLicenseNumber || !Address || !PhoneNumber || !EmailAddress || !Password) {
       toast.error("Please provide values into each input field")
     } else {
-      axios.post("http://localhost:5000/api/adminaddcustomer", {
+      if(!CustomerID) {
+        axios
+        .post("http://localhost:5000/api/adminaddcustomer", {
         FirstName,
         LastName,
         Age,
@@ -42,6 +52,25 @@ const AdminAddEditCustomer = () => {
       })
       .catch((err) => toast.error(err.response.data));
       toast.success("Customer Added Successfully");
+      } else {
+        axios
+        .put(`http://localhost:5000/api/adminUpdateCustomer/${CustomerID}`, {
+        FirstName,
+        LastName,
+        Age,
+        DrivingLicenseNumber,
+        Address,
+        PhoneNumber,
+        EmailAddress,
+        Password,
+      }).then(() => {
+        setState({FirstName: "", LastName: "", Age: "", DrivingLicenseNumber: "", Address: "", PhoneNumber: "", EmailAddress: "", Password: ""});
+      })
+      .catch((err) => toast.error(err.response.data));
+      toast.success("Customer Updated Successfully");
+
+      }
+
       setTimeout(() => history.push("/admincustomer"), 500);
     }
   };
@@ -68,7 +97,7 @@ const AdminAddEditCustomer = () => {
           id="FirstName"
           name="FirstName"
           placeholder="Your First Name ..."
-          value={FirstName}
+          value={FirstName || ""} 
           onChange={handleInputChange}
           />
           <label htmlFor="LastName">Last Name</label>
@@ -77,7 +106,7 @@ const AdminAddEditCustomer = () => {
           id="LastName"
           name="LastName"
           placeholder="Your Last Name ..."
-          value={LastName}
+          value={LastName || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="Age">Age</label>
@@ -86,7 +115,7 @@ const AdminAddEditCustomer = () => {
           id="Age"
           name="Age"
           placeholder="Your Age ..."
-          value={Age}
+          value={Age || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="DrivingLicenseNumber">Driving License Number</label>
@@ -95,7 +124,7 @@ const AdminAddEditCustomer = () => {
           id="DrivingLicenseNumber"
           name="DrivingLicenseNumber"
           placeholder="Your Driving License Number ..."
-          value={DrivingLicenseNumber}
+          value={DrivingLicenseNumber || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="Address">Address</label>
@@ -104,7 +133,7 @@ const AdminAddEditCustomer = () => {
           id="Address"
           name="Address"
           placeholder="Your Address ..."
-          value={Address}
+          value={Address || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="PhoneNumber">Phone Number</label>
@@ -113,7 +142,7 @@ const AdminAddEditCustomer = () => {
           id="PhoneNumber"
           name="PhoneNumber"
           placeholder="Your Phone Number ..."
-          value={PhoneNumber}
+          value={PhoneNumber || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="EmailAddress">Email Address</label>
@@ -122,7 +151,7 @@ const AdminAddEditCustomer = () => {
           id="EmailAddress"
           name="EmailAddress"
           placeholder="Your Email Address ..."
-          value={EmailAddress}
+          value={EmailAddress || ""}
           onChange={handleInputChange}
           />
           <label htmlFor="Password">Password</label>
@@ -131,10 +160,10 @@ const AdminAddEditCustomer = () => {
           id="Password"
           name="Password"
           placeholder="Your Password ..."
-          value={Password}
+          value={Password || ""}
           onChange={handleInputChange}
           />
-          <input type="submit" value="Save" />
+          <input type="submit" value={CustomerID ? "Update" : "Save"} /> 
           <Link to="/admincustomer">
             <input type="button" value="Go Back" />
           </Link>

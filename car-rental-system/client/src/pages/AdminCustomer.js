@@ -29,7 +29,7 @@ const AdminCustomer = () => {
  
   return (
     <div style={{marginTop: "150px"}}>
-    <Link to="/adminAddEditCustomer">
+    <Link to="/adminAddCustomer">
         <button className="btn btn-contact">Add Customer</button>
     </Link>
     <table className="styled-table">
@@ -43,19 +43,19 @@ const AdminCustomer = () => {
             </tr>
         </thead>
         <tbody>
-            {data.map((item, index) => {
+            {data.map((customer, index) => {
                 return (
-                    <tr key={item.CustomerID}>
+                    <tr key={customer.CustomerID}>
                         <th scope="row">{index+1}</th>
-                        <td>{item.FirstName}</td>
-                        <td>{item.LastName}</td>
-                        <td>{item.EmailAddress}</td>
+                        <td>{customer.FirstName}</td>
+                        <td>{customer.LastName}</td>
+                        <td>{customer.EmailAddress}</td>
                         <td>
-                            <Link to={` /updatecustomer/${item.CustomerID}`}>
+                            <Link to={`/adminUpdateCustomer/${customer.CustomerID}`}>
                                 <button className="btn btn-edit">Edit</button>
                             </Link>
-                            <button className="btn btn-delete" onClick={() => deleteCustomer(item.CustomerID)}>Delete</button>
-                            <Link to={` /adminViewCustomer/${item.CustomerID}`}>
+                            <button className="btn btn-delete" onClick={() => deleteCustomer(customer.CustomerID)}>Delete</button>
+                            <Link to={`/adminViewCustomer/${customer.CustomerID}`}>
                                 <button className="btn btn-view">View</button>
                             </Link>
                         </td>
