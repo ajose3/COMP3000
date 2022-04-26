@@ -28,14 +28,28 @@ function Vehicle() {
 
     // Function to create a review
     const addReview = () => {
-      axios.post("http://localhost:3001/reviews", {Review: newReview, VehicleRegPlate: RegPlate})
+      axios.post("http://localhost:3001/reviews", {
+        Review: newReview, 
+        VehicleRegPlate: RegPlate
+      }, 
+      {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      }
+      )
       .then((response) => {
+        if (response.data.error) {
+          console.log(response.data.error);
+          toast.error("You cannot submit a review without signing up");
+        } else {
         const reviewToAdd = { Review: newReview };
         setReviews([...reviews, reviewToAdd])
         setNewReview("");
+        toast.success("Review Submitted Successfully");
+        }
       })
       .catch((err) => toast.error(err.response.data));
-      toast.success("Review Submitted Successfully");
     }
 
   return (

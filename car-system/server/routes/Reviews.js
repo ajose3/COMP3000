@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Reviews } = require('../models');
+const { validateToken } = require("../middlewares/AuthMiddleWare");
 
 router.get("/:RegPlate", async (req, res) => {
     const RegPlate = req.params.RegPlate;
@@ -8,7 +9,7 @@ router.get("/:RegPlate", async (req, res) => {
     res.json(reviews);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", validateToken, async (req, res) => {
     const review = req.body;
     await Reviews.create(review);
     res.json(review);

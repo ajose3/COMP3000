@@ -24,7 +24,7 @@ function AllVehicles() {
         return (
           <div className="vehicle" key={key} onClick={() => {navigate(`/vehicle/${value.RegPlate}`)}}>
             <div className="carMake"> {value.CarMake} {value.CarModel} {value.CarYear} </div>
-            <div className="carImage"><img src={value.CarImage} height={200} width={350}/></div>
+            <div className="carImage"><img src={value.CarImage} height={200} width={350} /></div>
             <div className="carPrice">£{value.CarPrice}</div>
             <div className="carCategory">{value.CarCategory}</div>
             <div className="carTransmission">{value.CarTransmission}</div>
