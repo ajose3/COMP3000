@@ -17,4 +17,16 @@ router.post("/", validateToken, async (req, res) => {
     res.json(review);
 });
 
+router.delete("/:reviewId", validateToken, async (req, res) => {
+    const reviewId = req.params.reviewId;
+  
+    await Reviews.destroy({
+      where: {
+        id: reviewId,
+      },
+    });
+  
+    res.json("DELETED SUCCESSFULLY");
+  });
+
 module.exports = router;

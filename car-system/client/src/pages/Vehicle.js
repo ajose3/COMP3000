@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Vehicle.css';
 import './AllVehicles';
 import { toast } from 'react-toastify';
+import { AuthContext } from '../helpers/AuthContext';
 
 function Vehicle() {
 
@@ -12,6 +13,7 @@ function Vehicle() {
     const [vehicleObject, setVehicleObject] = useState({});
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState("");
+    const { authState } = useContext(AuthContext);
 
     // Calling API Routes
     useEffect(() => {
@@ -50,7 +52,22 @@ function Vehicle() {
         }
       })
       .catch((err) => toast.error(err.response.data));
-    }
+    };
+
+    const deleteReview = (id) => {
+      axios
+        .delete(`http://localhost:3001/reviews/${id}`, {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        })
+        .then(() => {
+          setReviews(
+            reviews.filter((val) => {
+              return val.id != id;
+            })
+          );
+          toast.success("Comment has been deleted");
+        });
+    };
 
   return (
     <div className="vehiclePage">
@@ -75,6 +92,15 @@ function Vehicle() {
             <div key={key} className='review'>
               {review.Review}
               <label> Email: {review.Email}</label>
+              {authState.Email === review.Email && (
+                  <button
+                    onClick={() => {
+                      deleteReview(review.id);
+                    }}
+                  >
+                    X
+                  </button>
+                )}
             </div>
             );
           })}

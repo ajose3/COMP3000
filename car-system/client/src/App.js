@@ -14,7 +14,11 @@ function App() {
 
   // *TO RUN Application, TYPE "cd client" in terminal, then "npm start"*
 
-  const [authState, setAuthState] = useState(false);
+  const [authState, setAuthState] = useState({
+    Email: "", 
+    CustomerID: 0, 
+    status: false,
+  });
 
   useEffect(() => {
     axios.get("http://localhost:3001/auth/auth", { 
@@ -24,14 +28,21 @@ function App() {
     })
     .then((response) => {
       if (response.data.error) {
-        setAuthState(false);
+        setAuthState({ ...authState, status: false });
       } else {
-        setAuthState(true);
+        setAuthState({
+          Email: response.data.Email, 
+          CustomerID: response.data.CustomerID, 
+          status: true,
+        });
       }
     });
   }, []);
 
-
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    setAuthState({ Email: "", CustomerID: 0, status: false });
+  };
 
   return (
     <div className="App">
@@ -41,12 +52,17 @@ function App() {
         <div className="navbar">
           <h1> Rentals </h1>
           <Link to="/"> Home Page</Link>
-          {!authState && (
+          {!authState.status ? (
             <>
           <Link to="/login"> Login</Link>
           <Link to="/registration"> Registration</Link>
           </>
+          ) : (
+            <button onClick={logout}> Logout</button>
           )}
+
+          <p className='welcome'>{authState.Email}</p>
+
         </div>
         <Routes>
           <Route path="/" element={<AllVehicles />} exact />

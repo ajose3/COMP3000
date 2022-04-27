@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../helpers/AuthContext';
+import { toast } from 'react-toastify';
 
 function Login() {
 
@@ -17,10 +18,15 @@ function Login() {
         const data = { Email: Email, Password: Password };
         axios.post("http://localhost:3001/auth/login", data).then((response) => {
           if (response.data.error) {
-            alert(response.data.error);
+            toast.error(response.data.error);
           } else {
-            localStorage.setItem("accessToken", response.data);
-            setAuthState(true);
+            localStorage.setItem("accessToken", response.data.token);
+            setAuthState({ 
+              Email: response.data.Email, 
+              CustomerID: response.data.CustomerID, 
+              status: true, 
+            });
+            toast.success("Login Success");
             navigate("/");
           }
         });

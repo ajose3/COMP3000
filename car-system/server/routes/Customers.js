@@ -58,7 +58,7 @@ router.post('/login',async(req,res,next)=>{
         { Email: customer.Email, CustomerID: customer.CustomerID },
         "importantsecret"
       );
-      res.json(accessToken);
+      res.json({token: accessToken, Email: customer.Email, CustomerID: customer.CustomerID});
     } else {
       res.status(400).json({ error : "Password Incorrect" });
     }
