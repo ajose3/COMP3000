@@ -21,10 +21,14 @@ function Registration() {
       });
 
     const onSubmit = (data) => {
-        axios.post("http://localhost:3001/auth", data).then(() => {
-            console.log(data);
-            navigate("/login");
-            toast.success("Registration Success");
+        axios.post("http://localhost:3001/auth", data).then((response) => {
+            if (response.data.error) {
+                toast.error(response.data.error)
+            } else {
+                console.log(data);
+                navigate("/login");
+                toast.success("Registration Success");
+            }
         });
     };
 

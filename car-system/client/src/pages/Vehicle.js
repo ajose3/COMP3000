@@ -34,7 +34,7 @@ function Vehicle() {
       }, 
       {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken"),
+          accessToken: localStorage.getItem("accessToken"),
         },
       }
       )
@@ -43,7 +43,7 @@ function Vehicle() {
           console.log(response.data.error);
           toast.error("You cannot submit a review without signing up");
         } else {
-        const reviewToAdd = { Review: newReview };
+        const reviewToAdd = { Review: newReview, Email: response.data.Email };
         setReviews([...reviews, reviewToAdd])
         setNewReview("");
         toast.success("Review Submitted Successfully");
@@ -74,6 +74,7 @@ function Vehicle() {
             return (
             <div key={key} className='review'>
               {review.Review}
+              <label> Email: {review.Email}</label>
             </div>
             );
           })}

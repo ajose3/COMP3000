@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { Customers } = require('../models');
 const bcrypt = require('bcrypt');
-
+const { validateToken } = require("../middlewares/AuthMiddleWare"); 
 const {sign} = require("jsonwebtoken");
 
-router.post("/", async (req, res) => {
+/*router.post("/", async (req, res) => {
     const { Email, Password } = req.body;
     bcrypt.hash(Password, 10).then((hash) => {
         Customers.create({
@@ -14,7 +14,39 @@ router.post("/", async (req, res) => {
         });
         res.json("SUCCESS");
     });
-});
+});*/
+
+router.post('/', (req, res) => {
+  const userData = {
+      Email: req.body.Email,
+      Password: req.body.Password,
+  }
+
+  Customers.findOne({
+      where: {
+          Email: req.body.Email
+      }
+  })
+      .then(user => {
+          if (!user) {
+              bcrypt.hash(req.body.Password, 10, (err, hash) => {
+              userData.Password = hash
+              Customers.create(userData)
+                  .then(user => {
+                      res.json({ status: user.Email + 'REGISTERED' })
+                  })
+                  .catch(err => {
+                      res.send('ERROR: ' + err)
+                  })
+              })
+          } else {
+              res.json({ error: "USER ALREADY EXISTS" })
+          }
+      })
+      .catch(err => {
+          res.send('ERROR: ' + err)
+      })
+})
 
   
 router.post('/login',async(req,res,next)=>{
@@ -35,6 +67,11 @@ router.post('/login',async(req,res,next)=>{
     res.status(404).json({ error : "User does not exist" });
   }
   
-  });
+});
+
+router.get("/auth", validateToken, (req, res) => {
+    res.json(req.customer);
+})
+
 
 module.exports = router;
