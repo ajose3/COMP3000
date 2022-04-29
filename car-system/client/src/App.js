@@ -2,10 +2,13 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import AllVehicles from './pages/AllVehicles';
 import Vehicle from './pages/Vehicle';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
+import AdminMenu from './pages/AdminMenu';
+import AdminRegister from './pages/AdminRegister';
 import { AuthContext } from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -39,11 +42,14 @@ function App() {
     });
   }, []);
 
+  // Logout function
   const logout = () => {
     localStorage.removeItem("accessToken");
     setAuthState({ Email: "", CustomerID: 0, status: false });
+    toast.success("Logged out successfully");
   };
 
+  // Navbar and routes are declared here
   return (
     <div className="App">
       <ToastContainer position="top-center" />
@@ -51,11 +57,12 @@ function App() {
       <Router>
         <div className="navbar">
           <h1> Rentals </h1>
-          <Link to="/"> Home Page</Link>
+          <Link to="/"> Home Page </Link>
           {!authState.status ? (
             <>
           <Link to="/login"> Login</Link>
           <Link to="/registration"> Registration</Link>
+          <Link to="/adminLogin"> Admin </Link>
           </>
           ) : (
             <button onClick={logout}> Logout</button>
@@ -69,6 +76,10 @@ function App() {
           <Route path="/vehicle/:RegPlate" element={<Vehicle />} exact />
           <Route path="/registration" element={<Registration />} exact />
           <Route path="/login" element={<Login />} exact /> 
+
+          <Route path="/adminLogin" element={<AdminLogin />} exact />
+          <Route path="/adminMenu" element={<AdminMenu />} exact />
+          <Route path="/adminRegister" element={<AdminRegister />} exact />
         </Routes>
       </Router>
       </AuthContext.Provider>

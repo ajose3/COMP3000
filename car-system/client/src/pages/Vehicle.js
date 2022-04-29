@@ -54,6 +54,7 @@ function Vehicle() {
       .catch((err) => toast.error(err.response.data));
     };
 
+    // Function to delete a review
     const deleteReview = (id) => {
       axios
         .delete(`http://localhost:3001/reviews/${id}`, {

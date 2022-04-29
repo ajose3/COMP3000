@@ -16,6 +16,7 @@ const {sign} = require("jsonwebtoken");
     });
 });*/
 
+// Register Customer
 router.post('/', (req, res) => {
   const userData = {
       Email: req.body.Email,
@@ -48,7 +49,7 @@ router.post('/', (req, res) => {
       })
 })
 
-  
+// Login Customer
 router.post('/login',async(req,res,next)=>{
  const customer = await Customers.findOne({ where : {Email : req.body.Email }});
  if(customer){
@@ -69,6 +70,7 @@ router.post('/login',async(req,res,next)=>{
   
 });
 
+// Get Customer info
 router.get("/auth", validateToken, (req, res) => {
     res.json(req.customer);
 })

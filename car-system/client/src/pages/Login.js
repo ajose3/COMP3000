@@ -14,6 +14,7 @@ function Login() {
 
     let navigate = useNavigate();
 
+    // Login function for customer
     const login = () => {
         const data = { Email: Email, Password: Password };
         axios.post("http://localhost:3001/auth/login", data).then((response) => {
@@ -34,7 +35,6 @@ function Login() {
 
   return (
     <div className="login">
-        <form>
             <h2>Enter credentials to login:</h2>
             <label>Username:</label>
             <input type="text" 
@@ -52,7 +52,6 @@ function Login() {
             <br /><br />
             <label className="newAccount">Don't have an account? Create one following the link below</label>
             <Link to="/registration">Sign Up</Link>
-        </form>
     </div>
   )
 }

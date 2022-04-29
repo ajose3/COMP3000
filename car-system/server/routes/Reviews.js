@@ -3,12 +3,14 @@ const router = express.Router();
 const { Reviews } = require('../models');
 const { validateToken } = require("../middlewares/AuthMiddleWare");
 
+// Get reviews for each car
 router.get("/:RegPlate", async (req, res) => {
     const RegPlate = req.params.RegPlate;
     const reviews = await Reviews.findAll({ where: { VehicleRegPlate: RegPlate }});
     res.json(reviews);
 });
 
+// Posts customer details when submitting a review
 router.post("/", validateToken, async (req, res) => {
     const review = req.body;
     const Email = req.customer.Email;
@@ -17,6 +19,7 @@ router.post("/", validateToken, async (req, res) => {
     res.json(review);
 });
 
+// Deleting a review
 router.delete("/:reviewId", validateToken, async (req, res) => {
     const reviewId = req.params.reviewId;
   

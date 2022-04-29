@@ -15,11 +15,13 @@ function Registration() {
 
     let navigate = useNavigate();
 
+    // Validation when customers are registering
     const validationSchema = Yup.object().shape({
         Email: Yup.string().required(),
         Password: Yup.string().min(4).max(20).required(),
       });
 
+    // Function to register the customer
     const onSubmit = (data) => {
         axios.post("http://localhost:3001/auth", data).then((response) => {
             if (response.data.error) {
