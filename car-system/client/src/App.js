@@ -9,6 +9,9 @@ import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
 import AdminMenu from './pages/AdminMenu';
 import AdminRegister from './pages/AdminRegister';
+import AdminViewAdmins from './pages/AdminViewAdmins';
+import AdminViewCars from './pages/AdminViewCars';
+import AddEditVehicle from './pages/AddEditVehicle';
 import { AuthContext } from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -80,6 +83,9 @@ function App() {
           <Route path="/adminLogin" element={<AdminLogin />} exact />
           <Route path="/adminMenu" element={<AdminMenu />} exact />
           <Route path="/adminRegister" element={<AdminRegister />} exact />
+          <Route path="/adminViewAdmins" element={<AdminViewAdmins />} exact />
+          <Route path="/adminViewCars" element={<AdminViewCars />} exact />
+          <Route path="/addEditVehicle" element={<AddEditVehicle />} exact />
         </Routes>
       </Router>
       </AuthContext.Provider>

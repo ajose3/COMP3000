@@ -1,0 +1,11 @@
+.addCar {
+    padding-top: 50px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .addCar label {
+    text-align: left;
+    display: block;
+    color: red;
+  }

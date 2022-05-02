@@ -1,12 +1,18 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import "./AdminMenu.css";
 
 const AdminMenu = () => {
 
   return (
-    <div>
-        <label>To add a new admin</label>
+    <div className='container'>
+        <label>To add a new admin: </label>
         <Link to="/adminRegister"> Register a new Admin </Link>
+        <b></b>
+        <label>To view admins: </label>
+        <Link to="/adminViewAdmins"> View Admins </Link>
+        <label>To view fleet: </label>
+        <Link to="/adminViewCars"> View Fleet </Link>
     </div>
   )
 };

@@ -36,7 +36,7 @@ function Login() {
   return (
     <div className="login">
             <h2>Enter credentials to login:</h2>
-            <label>Username:</label>
+            <label>Email Address:</label>
             <input type="text" 
             onChange={(event) => {setEmail(event.target.value);
             }}
