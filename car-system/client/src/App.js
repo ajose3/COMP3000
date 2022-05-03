@@ -6,6 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 import AdminLogin from './pages/AdminLogin';
 import AdminMenu from './pages/AdminMenu';
 import AdminRegister from './pages/AdminRegister';
@@ -68,10 +69,14 @@ function App() {
           <Link to="/adminLogin"> Admin </Link>
           </>
           ) : (
+            <>
             <button onClick={logout}> Logout</button>
+            <Link to="/profile/:CustomerID">Profile</Link>
+            </>
           )}
 
           <p className='welcome'>{authState.Email}</p>
+          
 
         </div>
         <Routes>
@@ -79,6 +84,7 @@ function App() {
           <Route path="/vehicle/:RegPlate" element={<Vehicle />} exact />
           <Route path="/registration" element={<Registration />} exact />
           <Route path="/login" element={<Login />} exact /> 
+          <Route path="/profile/:CustomerID" element={<Profile />} exact /> 
 
           <Route path="/adminLogin" element={<AdminLogin />} exact />
           <Route path="/adminMenu" element={<AdminMenu />} exact />

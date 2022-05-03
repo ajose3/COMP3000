@@ -73,7 +73,16 @@ router.post('/login',async(req,res,next)=>{
 // Get Customer info
 router.get("/auth", validateToken, (req, res) => {
     res.json(req.customer);
-})
+});
 
+router.get("/userInfo/:CustomerID", async (req, res) => {
+    const CustomerID = req.params.CustomerID;
+    
+    const userInfo = await Customers.findByPk(CustomerID, { 
+        attributes: { exclude: ['Password'] }, 
+    });
+
+    res.json(userInfo);
+});
 
 module.exports = router;
