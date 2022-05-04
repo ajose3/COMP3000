@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import ChangePassword from './pages/ChangePassword';
 import AdminLogin from './pages/AdminLogin';
 import AdminMenu from './pages/AdminMenu';
 import AdminRegister from './pages/AdminRegister';
@@ -53,6 +54,7 @@ function App() {
     toast.success("Logged out successfully");
   };
 
+
   // Navbar and routes are declared here
   return (
     <div className="App">
@@ -71,7 +73,7 @@ function App() {
           ) : (
             <>
             <button onClick={logout}> Logout</button>
-            <Link to="/profile/:CustomerID">Profile</Link>
+            <Link to={{ pathname: `/profile/${authState.CustomerID}`}} >Profile</Link>
             </>
           )}
 
@@ -85,6 +87,7 @@ function App() {
           <Route path="/registration" element={<Registration />} exact />
           <Route path="/login" element={<Login />} exact /> 
           <Route path="/profile/:CustomerID" element={<Profile />} exact /> 
+          <Route path="/changepassword" element={<ChangePassword />} exact /> 
 
           <Route path="/adminLogin" element={<AdminLogin />} exact />
           <Route path="/adminMenu" element={<AdminMenu />} exact />
