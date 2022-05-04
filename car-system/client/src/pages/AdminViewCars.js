@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import "./AdminViewCars.css";
+import { toast } from 'react-toastify';
 
 
 const AdminViewCars = () => {
@@ -11,13 +12,23 @@ const AdminViewCars = () => {
     const [listOfVehicles, setListOfVehicles] = useState([]);
     let navigate = useNavigate();
 
-    // Calling API Routes
-  useEffect(() => {
-    // Get all vehicles
-    axios.get("http://localhost:3001/vehicles").then((response) => {
+    const loadData = async () => {
+      const response = await axios.get("http://localhost:3001/vehicles");
       setListOfVehicles(response.data);
-    });
+  };
+
+  // Calling API Routes
+  useEffect(() => {
+    loadData();
   }, []);
+
+  const deleteVehicle = (RegPlate) => {
+    if (window.confirm("Are you sure you want to delete this vehicle ?")) {
+      axios.delete(`http://localhost:3001/vehicles/${RegPlate}`);
+      toast.success("Car Deleted Successfully");
+      setTimeout(() => loadData(), 500);
+    }
+  };
 
   return (
     <div>
@@ -25,10 +36,17 @@ const AdminViewCars = () => {
     <Link to="/addEditVehicle">
         <button className="btn btn-edit">Add Vehicle</button>
     </Link>
+    <Link to="/adminMenu">
+        <button className="btn btn-view">Back to Menu</button>
+    </Link>
     {listOfVehicles.map((value, key) => {
     return (
-      <div className="vehicle" key={key} onClick={() => {navigate(`/vehicle/${value.RegPlate}`)}}>
-        <div className="carMake"> {value.CarMake} {value.CarModel} {value.CarYear} </div>
+      <div className="vehicle" key={key}>
+        <div className="carMake">
+          {value.RegPlate} : {value.CarMake} {value.CarModel} {value.CarYear} 
+          <button onClick={() => {navigate(`/editVehicle/${value.RegPlate}`)}}>Edit</button>
+          <button onClick={() => deleteVehicle(value.RegPlate)}>Delete Vehicle</button>
+        </div>
         <div className="carImage"><img src={value.CarImage} height={200} width={350} /></div>
         <div className="carPrice">Price: £{value.CarPrice}</div>
         <div className="carCategory">{value.CarCategory}</div>

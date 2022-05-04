@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import ChangePassword from './pages/ChangePassword';
 import AdminLogin from './pages/AdminLogin';
 import AdminMenu from './pages/AdminMenu';
+import EditVehicle from './pages/EditVehicle';
 import AdminRegister from './pages/AdminRegister';
 import AdminViewAdmins from './pages/AdminViewAdmins';
 import AdminViewCars from './pages/AdminViewCars';
@@ -95,6 +96,7 @@ function App() {
           <Route path="/adminViewAdmins" element={<AdminViewAdmins />} exact />
           <Route path="/adminViewCars" element={<AdminViewCars />} exact />
           <Route path="/addEditVehicle" element={<AddEditVehicle />} exact />
+          <Route path="/editVehicle/:RegPlate" element={<EditVehicle />} exact />
         </Routes>
       </Router>
       </AuthContext.Provider>
