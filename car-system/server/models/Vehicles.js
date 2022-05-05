@@ -48,11 +48,6 @@ module.exports = (sequelize, DataTypes) => {
         });
     };
     
-    Vehicles.associate = (models) => {
-        Vehicles.hasMany(models.Rental, {
-            onDelete: "cascade",
-        });
-    };
     
     return Vehicles;
 };

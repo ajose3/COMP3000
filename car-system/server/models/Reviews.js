@@ -5,9 +5,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        Email: {
+        FirstName: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
     });
 

@@ -22,6 +22,7 @@ function Profile() {
     <div className="profilePageContainer">
         <div className="userInfo">
             <h1> Email: {customerObject.Email} </h1>
+            <h1> First Name: {customerObject.FirstName} </h1>
             <h1>ID: {customerObject.CustomerID}</h1>
             <button className='changepButton' onClick={() => navigate("/changepassword")}>Change Password</button>
         </div>

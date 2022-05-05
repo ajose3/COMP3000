@@ -5,20 +5,12 @@ const bcrypt = require('bcrypt');
 const { validateToken } = require("../middlewares/AuthMiddleWare"); 
 const {sign} = require("jsonwebtoken");
 
-/*router.post("/", async (req, res) => {
-    const { Email, Password } = req.body;
-    bcrypt.hash(Password, 10).then((hash) => {
-        Customers.create({
-            Email: Email,
-            Password: hash,
-        });
-        res.json("SUCCESS");
-    });
-});*/
 
 // Register Customer
 router.post('/', (req, res) => {
   const userData = {
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
       Email: req.body.Email,
       Password: req.body.Password,
   }
@@ -71,10 +63,10 @@ router.post('/login',async(req,res,next)=>{
 
 
     const accessToken = sign(
-        { Email: customer.Email, CustomerID: customer.CustomerID },
+        { Email: customer.Email, CustomerID: customer.CustomerID, FirstName: customer.FirstName },
         "importantsecret"
       );
-      res.json({token: accessToken, Email: customer.Email, CustomerID: customer.CustomerID});
+      res.json({token: accessToken, Email: customer.Email, CustomerID: customer.CustomerID, FirstName: customer.FirstName});
 
      
 });

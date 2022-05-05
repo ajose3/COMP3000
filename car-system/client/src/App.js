@@ -8,6 +8,7 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import ChangePassword from './pages/ChangePassword';
+import PageNotFound from './pages/PageNotFound';
 import AdminLogin from './pages/AdminLogin';
 import AdminMenu from './pages/AdminMenu';
 import EditVehicle from './pages/EditVehicle';
@@ -25,7 +26,8 @@ function App() {
 
   const [authState, setAuthState] = useState({
     Email: "", 
-    CustomerID: 0, 
+    CustomerID: 0,
+    FirstName: "", 
     status: false,
   });
 
@@ -42,6 +44,7 @@ function App() {
         setAuthState({
           Email: response.data.Email, 
           CustomerID: response.data.CustomerID, 
+          FirstName: response.data.FirstName,
           status: true,
         });
       }
@@ -51,7 +54,7 @@ function App() {
   // Logout function
   const logout = () => {
     localStorage.removeItem("accessToken");
-    setAuthState({ Email: "", CustomerID: 0, status: false });
+    setAuthState({ Email: "", CustomerID: 0, FirstName: "", status: false });
     toast.success("Logged out successfully");
   };
 
@@ -89,6 +92,8 @@ function App() {
           <Route path="/login" element={<Login />} exact /> 
           <Route path="/profile/:CustomerID" element={<Profile />} exact /> 
           <Route path="/changepassword" element={<ChangePassword />} exact /> 
+
+          <Route path="*" element={<PageNotFound />} exact /> 
 
           <Route path="/adminLogin" element={<AdminLogin />} exact />
           <Route path="/adminMenu" element={<AdminMenu />} exact />

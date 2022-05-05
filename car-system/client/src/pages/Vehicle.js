@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Vehicle.css';
 import './AllVehicles';
@@ -14,6 +14,8 @@ function Vehicle() {
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState("");
     const { authState } = useContext(AuthContext);
+    let navigate = useNavigate();
+
 
     // Calling API Routes
     useEffect(() => {
@@ -45,10 +47,11 @@ function Vehicle() {
           console.log(response.data.error);
           toast.error("You cannot submit a review without signing up");
         } else {
-        const reviewToAdd = { Review: newReview, Email: response.data.Email };
-        setReviews([...reviews, reviewToAdd])
-        setNewReview("");
-        toast.success("Review Submitted Successfully");
+          const reviewToAdd = { Review: newReview, FirstName: response.data.FirstName };
+          setReviews([...reviews, reviewToAdd])
+          setNewReview("");
+          toast.success("Review Submitted Successfully");
+          navigate("/");
         }
       })
       .catch((err) => toast.error(err.response.data));
@@ -66,9 +69,12 @@ function Vehicle() {
               return val.id != id;
             })
           );
-          toast.success("Comment has been deleted");
+          toast.success("Review Deleted Successfully");
+          navigate("/");
         });
     };
+
+
 
   return (
     <div className="vehiclePage">
@@ -92,16 +98,9 @@ function Vehicle() {
             return (
             <div key={key} className='review'>
               {review.Review}
-              <label> Email: {review.Email}</label>
-              {authState.Email === review.Email && (
-                  <button
-                    onClick={() => {
-                      deleteReview(review.id);
-                    }}
-                  >
-                    X
-                  </button>
-                )}
+              <label> By: {review.FirstName}</label>
+              {authState.FirstName === review.FirstName && (
+                <button onClick={() => {deleteReview(review.id)}}> X</button>)}
             </div>
             );
           })}

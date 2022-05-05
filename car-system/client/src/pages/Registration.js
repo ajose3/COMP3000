@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 function Registration() {
 
     const initialValues = {
+        FirstName: "",
+        LastName: "",
         Email: "",
         Password: "",
     };
@@ -17,6 +19,8 @@ function Registration() {
 
     // Validation when customers are registering
     const validationSchema = Yup.object().shape({
+        FirstName: Yup.string().required(),
+        LastName: Yup.string().required(),
         Email: Yup.string().required(),
         Password: Yup.string().min(4).max(20).required(),
       });
@@ -39,6 +43,24 @@ function Registration() {
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema} >
             <Form className="registerCustomer">
                 <h2>Please Enter the following information to register:</h2>
+                <label>First Name: </label>
+                <ErrorMessage name="FirstName" component="span" />
+                <Field 
+                id="FirstName" 
+                autoComplete="off"
+                name="FirstName" 
+                placeholder="Ex. john..." 
+                />
+            
+                <label>Last Name: </label>
+                <ErrorMessage name="LastName" component="span" />
+                <Field 
+                id="LastName" 
+                autoComplete="off"
+                name="LastName" 
+                placeholder="Ex. john..." 
+                />
+
                 <label>Email: </label>
                 <ErrorMessage name="Email" component="span" />
                 <Field 

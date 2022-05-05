@@ -13,8 +13,8 @@ router.get("/:RegPlate", async (req, res) => {
 // Posts customer details when submitting a review
 router.post("/", validateToken, async (req, res) => {
     const review = req.body;
-    const Email = req.customer.Email;
-    review.Email = Email;
+    const FirstName = req.customer.FirstName;
+    review.FirstName = FirstName;
     await Reviews.create(review);
     res.json(review);
 });

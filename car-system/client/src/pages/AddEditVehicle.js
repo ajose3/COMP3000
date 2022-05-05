@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddEditVehicle = () => {
 
+    // Setting initial values
     const initialValues = {
         RegPlate: "",
         CarMake: "",
@@ -22,12 +23,12 @@ const AddEditVehicle = () => {
 
     let navigate = useNavigate();
 
-    // Validation when customers are registering
+    // Validation when registering the number plate of the vehicle
     const validationSchema = Yup.object().shape({
         RegPlate: Yup.string().max(7).required(),
       });
 
-    // Function to register the customer
+    // Function to register vehicle
     const onSubmit = (data) => {
         axios.post("http://localhost:3001/vehicles", data).then((response) => {
             if (response.data.error) {
