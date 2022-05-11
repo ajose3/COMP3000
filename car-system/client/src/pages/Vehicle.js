@@ -5,6 +5,8 @@ import './Vehicle.css';
 import './AllVehicles';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../helpers/AuthContext';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function Vehicle() {
 
@@ -14,6 +16,10 @@ function Vehicle() {
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState("");
     const { authState } = useContext(AuthContext);
+
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
     let navigate = useNavigate();
 
 
@@ -105,6 +111,60 @@ function Vehicle() {
             );
           })}
         </div>
+      </div>
+      <div className='bottomSide'>
+      <h2>Rent this car: </h2>
+          <label>Start Date: </label>
+          <DatePicker 
+            selected={startDate} 
+            onChange={date => setStartDate(date)}
+            dateFormat='dd/MM/yyyy' 
+            minDate={new Date()}
+            filterDate={date => date.getDay() !== 0}
+          />
+          <label>End Date: </label>
+          <DatePicker 
+            selected={endDate} 
+            onChange={date => setEndDate(date)}
+            dateFormat='dd/MM/yyyy' 
+            minDate={startDate}
+            filterDate={date => date.getDay() !== 0}
+          />
+
+          <br />
+          <br />
+
+          <label>Pick-up location: </label>
+          <select>
+            <option>Plymouth</option>
+            <option>Exeter</option>
+            <option>Bristol</option>
+          </select>
+          
+          <br />
+          
+          <label>Drop-off location: </label>
+          <select>
+            <option>Plymouth</option>
+            <option>Exeter</option>
+            <option>Bristol</option>
+          </select>
+
+          <br />
+          <br />
+
+          <label>Price: </label>
+          <label>£ 100.00</label>
+
+          <br />
+          <br />
+
+          <button>Check Availability</button>
+
+          <br />
+          <br />
+          <label>Availability: </label>
+          <label>Available</label>
       </div>
     </div>
     
