@@ -1,0 +1,71 @@
+.AllVehicles {
+    padding-left: 500px;
+  }
+  
+  .vehicle {
+      width: 500px;
+      height: 400px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      margin: 50px;
+      margin-top: 50px;
+      border: 1px solid lightgray;
+      border-width: 10px;
+      border-top-style: solid;
+      font-family: Arial, Helvetica, sans-serif;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    }
+    
+    .vehicle:hover {
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      cursor: pointer;
+    }
+    .vehicle .carMake, .carModel {
+      flex: 20%;
+      border-bottom: 1px solid lightgray;
+      background-color: dodgerblue;
+      display: grid;
+      place-content: center;
+      color: white;
+      font-family: Tahoma;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+    
+    .vehicle .carImage {
+      flex: 80%;
+      display: grid;
+      place-content: center;
+    }
+    
+    .vehicle .carPrice {
+      flex: 20%;
+      background-color: dodgerblue;
+      display: grid;
+      place-content: left;
+      color: white;
+      padding-top: 10px;
+      padding-left: 10px;
+    }
+    
+    .vehicle .carCategory {
+      flex: 20%;
+      background-color: dodgerblue;
+      display: grid;
+      padding-top: 10px;
+      padding-left: 10px;
+      place-content: left;
+      color: white;
+    }
+  
+    .vehicle .carTransmission {
+      flex: 20%;
+      background-color: gray;
+      display: grid;
+      place-content: left;
+      color: white;
+      padding-top: 10px;
+      padding-left: 10px;
+    }
