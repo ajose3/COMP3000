@@ -13,6 +13,8 @@ const AdminMenu = () => {
         <Link to="/adminViewAdmins"> View Admins </Link>
         <label>To view fleet: </label>
         <Link to="/adminViewCars"> View Fleet </Link>
+        <label>To add a new Agent: </label>
+        <Link to="/adminRegisterAgent"> View Fleet </Link>
     </div>
   )
 };

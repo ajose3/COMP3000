@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Admins } = require('../models');
+const { Admins, Agents } = require('../models');
 const bcrypt = require('bcrypt');
 
 // Get All Admins
@@ -8,6 +8,40 @@ router.get("/", async (req, res) => {
     const listOfAdmins = await Admins.findAll();
     res.json(listOfAdmins);
 });
+
+// Register Agent
+router.post('/regAgent', (req, res) => {
+    const agentData = {
+        Username: req.body.Username,
+        Password: req.body.Password,
+    }
+  
+    Agents.findOne({
+        where: {
+            Username: req.body.Username
+        }
+    })
+        .then(agent => {
+            if (!agent) {
+                bcrypt.hash(req.body.Password, 10, (err, hash) => {
+                agentData.Password = hash
+                Agents.create(agentData)
+                    .then(agent => {
+                        res.json({ status: agent.Username + 'REGISTERED' })
+                    })
+                    .catch(err => {
+                        res.send('ERROR: ' + err)
+                    })
+                })
+            } else {
+                res.json({ error: "ADMIN ALREADY EXISTS" })
+            }
+        })
+        .catch(err => {
+            res.send('ERROR: ' + err)
+        })
+});
+
 
 // Register Admin
 router.post('/', (req, res) => {

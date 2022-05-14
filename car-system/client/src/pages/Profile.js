@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import "./Profile.css";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 import { AuthContext } from '../helpers/AuthContext';
 
@@ -22,9 +22,11 @@ function Profile() {
     <div className="profilePageContainer">
         <div className="userInfo">
             <h1> Email: {customerObject.Email} </h1>
-            <h1> First Name: {customerObject.FirstName} </h1>
-            <h1>ID: {customerObject.CustomerID}</h1>
-            <button className='changepButton' onClick={() => navigate("/changepassword")}>Change Password</button>
+            <h1> Welcome Back, {customerObject.FirstName} {customerObject.LastName} </h1>
+            <button className='btn btn-contact' onClick={() => navigate("/changepassword")}>Change Password</button>
+            <Link to={{ pathname: `/viewRentals/${authState.CustomerID}`}}>
+                <button className='btn btn-edit'>View Rentals</button>
+            </Link>
         </div>
     </div>
   )

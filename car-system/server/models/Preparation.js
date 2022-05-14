@@ -1,17 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Rentals = sequelize.define("Rentals", {
-        RentingID: {
+    const Preparation = sequelize.define("Preparation", {
+        PreparationID: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true,
         },
-        StartDate: {
-            type: DataTypes.DATEONLY,
-            allowNull: false
-        },
-        EndDate: {
+        VehicleReadyDate: {
             type: DataTypes.DATEONLY,
             allowNull: false
         },
@@ -23,22 +19,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        Cost: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: false,
-        },
-        Email: {
+        Status: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull:false,
         },
     });
-
-    Rentals.associate = (models) => {
-        Rentals.hasMany(models.Preparation, {
-            onDelete: "cascade",
-        });
-    };
     
 
-    return Rentals;
+    return Preparation;
 };

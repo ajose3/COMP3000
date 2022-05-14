@@ -19,15 +19,15 @@ function AllVehicles() {
   }, []);
 
   return (
-    <div>
+    <div className='AllVehicles'>
         {listOfVehicles.map((value, key) => {
         return (
           <div className="vehicle" key={key} onClick={() => {navigate(`/vehicle/${value.RegPlate}`)}}>
             <div className="carMake"> {value.CarMake} {value.CarModel} {value.CarYear} </div>
             <div className="carImage"><img src={value.CarImage} height={200} width={350} /></div>
+            <div className="carCategory">Category: {value.CarCategory}</div>
+            <div className="carTransmission">Transmission: {value.CarTransmission}</div>
             <div className="carPrice">Price: £{value.CarPrice}</div>
-            <div className="carCategory">{value.CarCategory}</div>
-            <div className="carTransmission">{value.CarTransmission}</div>
           </div>
         );
       })}

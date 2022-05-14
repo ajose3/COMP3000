@@ -1,0 +1,25 @@
+.feedback input,
+button {
+  width: 500px;
+  height: 100px;
+  border-radius: 8px;
+  border: none;
+}
+
+.feedback input {
+    border: 2px solid #8C38FF;
+  }
+
+  .feedback button {
+    background-color: green;
+    color: white;
+  }
+
+  .listOfFeedback .feedback {
+    width: 70%;
+    height: auto;
+    padding: 30px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-top: 20px;
+  }

@@ -2,13 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Vehicle.css';
-import './AllVehicles';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../helpers/AuthContext';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function Vehicle() {
+
+
 
     // Defining variables
     let { RegPlate } = useParams();
@@ -17,8 +18,7 @@ function Vehicle() {
     const [newReview, setNewReview] = useState("");
     const { authState } = useContext(AuthContext);
 
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+  
 
     let navigate = useNavigate();
 
@@ -36,6 +36,7 @@ function Vehicle() {
       });
     }, []);
 
+  
     // Function to create a review
     const addReview = () => {
       axios.post("http://localhost:3001/reviews", {
@@ -84,15 +85,25 @@ function Vehicle() {
 
   return (
     <div className="vehiclePage">
+      
       <div className="leftSide">
         <div className='vehicle' id='individual'>
-          <div className="carMake"> <h1> {vehicleObject.CarMake} {vehicleObject.CarModel} {vehicleObject.CarYear} </h1> </div>
-          <div className="carImage"><img src={vehicleObject.CarImage} width="50%"/></div>
-          <div className="carPrice"> <p> Daily Price: £{vehicleObject.CarPrice} </p> </div>
-          <div className="carCategory"> <p> Category: {vehicleObject.CarCategory} </p></div>
-          <div className="carTransmission"> <p> Transmission: {vehicleObject.CarTransmission} </p> </div>
-          <div className="seats"> <p> No. of seats: {vehicleObject.CarSeats} </p> </div>
+            <div className="carMake"> {vehicleObject.CarMake} {vehicleObject.CarModel} {vehicleObject.CarYear} </div>
+            <div className="carImage"><img src={vehicleObject.CarImage} height={200} width={350} /></div>
         </div>
+        <div className='extraInfo'>
+            <div className='specs'>Specifications: </div>
+            <div className="carCategory">Category: {vehicleObject.CarCategory}</div>
+            <div className="carTransmission">Transmission: {vehicleObject.CarTransmission}</div>
+            <div className="carPrice">Price: £{vehicleObject.CarPrice}</div>
+            <div className='carSeats'>No. of Seats: {vehicleObject.CarSeats} seats</div>
+        </div>
+        <div className='rentBtn'>
+          <button onClick={() => {navigate(`/rentPage/${vehicleObject.RegPlate}`)}}>Rent This Car</button>
+        </div>
+        
+      
+      
       </div>
       <div className='rightSide'>
         <div className='addReviewContainer'>
@@ -103,68 +114,16 @@ function Vehicle() {
           {reviews.map((review, key) => {
             return (
             <div key={key} className='review'>
-              {review.Review}
-              <label> By: {review.FirstName}</label>
+              <label>Review From: {review.FirstName}</label>
               {authState.FirstName === review.FirstName && (
                 <button onClick={() => {deleteReview(review.id)}}> X</button>)}
+                <br />
+                <br />
+              "{review.Review}"
             </div>
             );
           })}
         </div>
-      </div>
-      <div className='bottomSide'>
-      <h2>Rent this car: </h2>
-          <label>Start Date: </label>
-          <DatePicker 
-            selected={startDate} 
-            onChange={date => setStartDate(date)}
-            dateFormat='dd/MM/yyyy' 
-            minDate={new Date()}
-            filterDate={date => date.getDay() !== 0}
-          />
-          <label>End Date: </label>
-          <DatePicker 
-            selected={endDate} 
-            onChange={date => setEndDate(date)}
-            dateFormat='dd/MM/yyyy' 
-            minDate={startDate}
-            filterDate={date => date.getDay() !== 0}
-          />
-
-          <br />
-          <br />
-
-          <label>Pick-up location: </label>
-          <select>
-            <option>Plymouth</option>
-            <option>Exeter</option>
-            <option>Bristol</option>
-          </select>
-          
-          <br />
-          
-          <label>Drop-off location: </label>
-          <select>
-            <option>Plymouth</option>
-            <option>Exeter</option>
-            <option>Bristol</option>
-          </select>
-
-          <br />
-          <br />
-
-          <label>Price: </label>
-          <label>£ 100.00</label>
-
-          <br />
-          <br />
-
-          <button>Check Availability</button>
-
-          <br />
-          <br />
-          <label>Availability: </label>
-          <label>Available</label>
       </div>
     </div>
     

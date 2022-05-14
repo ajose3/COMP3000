@@ -1,40 +1,93 @@
 const express = require('express');
 const router = express.Router();
-const { Rentals } = require('../models');
+const { Rentals, sequelize } = require('../models');
 const { validateToken } = require("../middlewares/AuthMiddleWare");
 
-// Reserve a vehicle
-router.post("/", validateToken, async (req, res) => {
+// Get All Rent
+router.get("/", async (req, res) => {
+    const listOfReservations = await Rentals.findAll();
+    res.json(listOfReservations);
+});
 
-    const rentalData = {
+router.get("/status/:RegPlate", async (req, res) => {
+    const RegPlate = req.params.RegPlate;
+    const StartDate = req.body.StartDate;
+    const EndDate = req.body.EndDate;
+
+    
+
+    const notAvaialble = Rentals.findOne({
+        where: {
+            StartDate: StartDate,
+            EndDate: EndDate,
+            VehicleRegPlate: RegPlate            
+        }
+        
+    }).catch((err) => {
+        console.log("Error: ", err);
+    });
+
+    if (notAvaialble) {
+        return res.json({ message: "Available" });
+    } 
+
+    //return res.json({ error: "Not Available" });
+    
+   // if (!notAvaialble) {
+     //   return res.json({ message: "Available"});
+    //}
+    
+});
+
+// View all Customer rentals
+router.get("/:CustomerID", async (req, res) => {
+    const CustomerID = req.params.CustomerID;
+
+    const rentals = await Rentals.findAll({
+        where: {
+            CustomerCustomerID: CustomerID
+        }
+    });
+    res.json(rentals);
+});
+
+// Reserve a vehicle
+router.post("/:RegPlate", validateToken, async (req, res) => {
+
+    const data = {
         StartDate: req.body.StartDate,
         EndDate: req.body.EndDate,
         PickUp: req.body.PickUp,
         DropOff: req.body.DropOff,
         Cost: req.body.Cost,
-        Email: customer.Email,
     }
 
-    const duplicate = await Rentals.findOne({ where: { Email: customer.Email, StartDate: req.body.StartDate, EndDate: req.body.EndDate } }).catch((err) => {
+    const Email = req.customer.Email;
+    data.Email = Email;
+    const CustomerID = req.customer.CustomerID;
+    data.CustomerCustomerID = CustomerID;
+    const VehicleRegPlate = req.params.RegPlate;
+    data.VehicleRegPlate = VehicleRegPlate;
+    await Rentals.create(data);
+    res.json(data);
+
+});
+
+// Deleting a review
+router.delete("/:RentingID", async (req, res) => {
+    const { RentingID } = req.params;
+
+    const row = await Rentals.findOne({
+        where: { RentingID: RentingID },
+      }).catch((err) => {
         console.log("Error: ", err);
     });
+      
+      if (row) {
+        await row.destroy(); // deletes the row
+      }
 
-    if (duplicate) {
-        return res.json({ error: "You have already booked a vehicle during this period!" });
-    }
-
-    const vehicleTaken = await Rentals.findOne({ where: { StartDate: req.body.StartDate, EndDate: req.body.EndDate, VehicleRegPlate: RegPlate } }).catch((err) => {
-        console.log("Error: ", err);
-    });
-
-    if (vehicleTaken) {
-        return res.json({ error: "Vehicle is not available!" });
-    }
-
-    await Rentals.create(rentalData);
-    res.json(rentalData);
-
-
+      res.json("Deleted successfully!")
 });
 
 module.exports = router;

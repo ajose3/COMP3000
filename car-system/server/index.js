@@ -27,6 +27,15 @@ app.use("/admins", adminsRouter);
 const rentalsRouter = require('./routes/Rentals');
 app.use("/rentals", rentalsRouter);
 
+// Feedback Router
+const feedbackRouter = require('./routes/Feedback');
+app.use("/feedback", feedbackRouter);
+
+// Agents Router
+const agentsRouter = require('./routes/Agents');
+app.use("/agents", agentsRouter);
+
+
 
 // Running on port 3001   *TO RUN SERVER, TYPE "cd server" in terminal, then "npm start"*
 db.sequelize.sync().then(() => {
