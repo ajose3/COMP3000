@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Rentals, sequelize } = require('../models');
+const { Rentals, sequelize, Sequelize } = require('../models');
 const { validateToken } = require("../middlewares/AuthMiddleWare");
 
 // Get All Rent
@@ -68,6 +68,25 @@ router.post("/:RegPlate", validateToken, async (req, res) => {
     data.CustomerCustomerID = CustomerID;
     const VehicleRegPlate = req.params.RegPlate;
     data.VehicleRegPlate = VehicleRegPlate;
+
+    const notStart = await Rentals.findOne({ where: Sequelize.and({StartDate: req.body.StartDate}, {VehicleRegPlate: req.params.RegPlate})}).catch((err) => {
+        console.log("Error: ", err);
+    });
+
+    if (notStart){
+        return res.json({ error: "Vehicle Not Available on this day!" });
+    }
+
+    const notEnd = await Rentals.findOne({ where: Sequelize.and({EndDate: req.body.EndDate}, {VehicleRegPlate: req.params.RegPlate})}).catch((err) => {
+        console.log("Error: ", err);
+    });
+
+    if (notEnd){
+        return res.json({ error: "Vehicle Not Available on this day!" });
+    }
+
+
+
     await Rentals.create(data);
     res.json(data);
 

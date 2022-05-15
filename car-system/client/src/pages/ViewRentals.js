@@ -46,9 +46,12 @@ function ViewRentals() {
         <thead>
             <tr>
                 <th style={{textAlign: "center"}}>No.</th>
+                <th style={{textAlign: "center"}}>Reservation Number:</th>
                 <th style={{textAlign: "center"}}>Start Date:</th>
                 <th style={{textAlign: "center"}}>End Date:</th>
                 <th style={{textAlign: "center"}}>Vehicle:</th>
+                <th style={{textAlign: "center"}}>Pick Up Location:</th>
+                <th style={{textAlign: "center"}}>Drop Off Location:</th>
                 <th style={{textAlign: "center"}}>Cost:</th>
                 <th style={{textAlign: "center"}}>Cancel:</th>
                 <th style={{textAlign: "center"}}>Feedback:</th>
@@ -59,10 +62,13 @@ function ViewRentals() {
                 return (
                     <tr key={index}>
                         <th scope="row">{index+1}</th>
+                        <td>{item.RentingID}</td>
                         <td>{item.StartDate}</td>
                         <td>{item.EndDate}</td>
                         <td><Link to={{ pathname: `/vehicle/${item.VehicleRegPlate}`}}>Click Here</Link></td>
-                        <td>{item.Cost}</td>
+                        <td>{item.PickUp}</td>
+                        <td>{item.DropOff}</td>
+                        <td>£{item.Cost}</td>
                         <td>
                             <button className="btn btn-delete" onClick={() => cancelReservation(item.RentingID)}>Cancel Rent</button>
                         </td>

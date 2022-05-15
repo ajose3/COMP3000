@@ -23,6 +23,7 @@ import AdminViewAdmins from './pages/AdminViewAdmins';
 import AdminViewCars from './pages/AdminViewCars';
 import AddEditVehicle from './pages/AddEditVehicle';
 import AdminRegisterAgent from './pages/AdminRegisterAgent';
+import EditCustomer from './pages/EditCustomer';
 import { AuthContext } from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -79,17 +80,14 @@ function App() {
             <>
           <Link to="/login"> Login</Link>
           <Link to="/registration"> Registration</Link>
-          <Link to="/adminLogin"> Admin </Link>
-          <Link to="/agentLogin"> Agent </Link>
           </>
           ) : (
             <>
-            <button onClick={logout}> Logout</button>
             <Link to={{ pathname: `/profile/${authState.CustomerID}`}} >Profile</Link>
+            <p className='welcome'>welcome back {authState.FirstName}...</p>
+            <button onClick={logout}> Logout</button>
             </>
           )}
-
-          <p className='welcome'>{authState.Email}</p>
           
 
         </div>
@@ -103,6 +101,7 @@ function App() {
           <Route path="/rentPage/:RegPlate" element={<RentPage />} exact />
           <Route path="/feedback/:RegPlate" element={<Feedback />} exact />
           <Route path="/viewRentals/:CustomerID" element={<ViewRentals />} exact />
+          <Route path="/editCustomer/:CustomerID" element={<EditCustomer />} exact />
 
           <Route path="*" element={<PageNotFound />} exact /> 
 

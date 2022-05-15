@@ -120,4 +120,16 @@ router.put("/changepassword", validateToken, async (req, res) => {
 
 });
 
+router.put("/editInfo", validateToken, async (req, res) => {
+    
+    const {DrivingLicenseNumber, DateOfBirth, Address, PhoneNumber} = req.body;
+    //const Address = req.body.Address;
+    //const PhoneNumber = req.body.PhoneNumber;
+
+    Customers.update({
+        DrivingLicenseNumber: DrivingLicenseNumber, DateOfBirth: DateOfBirth, Address: Address, PhoneNumber: PhoneNumber
+    }, {where: { Email: req.customer.Email}});
+    return res.json("Success");
+});
+
 module.exports = router;

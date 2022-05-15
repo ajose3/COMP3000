@@ -71,10 +71,10 @@ function RentPage() {
       .then((response) => {
         if (response.data.error) {
           console.log(response.data.error);
-          toast.error("You cannot rent without having an account");
+          toast.error(response.data.error);
         } else {
-          toast.success("Reserved Successfully");
-          navigate("/");
+          toast.success("Booking has been successful and can be viewed in your portal");
+          navigate(`/viewRentals/${authState.CustomerID}`);
         }
       })
       .catch((err) => toast.error(err.response.data));
@@ -115,14 +115,25 @@ function RentPage() {
           <br />
       </div>  
           
-          
-          <input type="text" placeholder="card number" />
+        <div className="payment">
+          <h1>Payment Section</h1>
+          <label>Full Name as on card: </label>
+          <input name="Name" type="text" placeholder="Full name" />
           <br />
-          <input type="text" placeholder="sort code" />
           <br />
-          <input type="text" placeholder="security number" />
+          <label>Card Number: </label>
+          <input name="CardNumber" type="text" placeholder="card number" />
           <br />
-          <button onClick={rent}>Rent</button>   
+          <br />
+          <label>Sort Code: </label>
+          <input name="SortCode" type="text" placeholder="sort code" />
+          <br />
+          <br />
+          <label>Security Number: </label>
+          <input name="SecurityNumber" type="text" placeholder="security number" />
+          <br />
+        </div>
+        <button onClick={rent}>Confirm your reservation</button>   
     </div>
   )
 };

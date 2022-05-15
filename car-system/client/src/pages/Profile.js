@@ -23,9 +23,16 @@ function Profile() {
         <div className="userInfo">
             <h1> Email: {customerObject.Email} </h1>
             <h1> Welcome Back, {customerObject.FirstName} {customerObject.LastName} </h1>
+            <h2>Date of birth: {customerObject.DateOfBirth}</h2>
+            <h2>Driving License Number: {customerObject.DrivingLicenseNumber}</h2>
+            <h2>Address: {customerObject.Address}</h2>
+            <h2>Phone Number: {customerObject.PhoneNumber}</h2>
             <button className='btn btn-contact' onClick={() => navigate("/changepassword")}>Change Password</button>
             <Link to={{ pathname: `/viewRentals/${authState.CustomerID}`}}>
                 <button className='btn btn-edit'>View Rentals</button>
+            </Link>
+            <Link to={{ pathname: `/editCustomer/${authState.CustomerID}`}}>
+                <button className='btn btn-view'>Edit My Details</button>
             </Link>
         </div>
     </div>

@@ -21,7 +21,7 @@ function Registration() {
     const validationSchema = Yup.object().shape({
         FirstName: Yup.string().required(),
         LastName: Yup.string().required(),
-        Email: Yup.string().required(),
+        Email: Yup.string().email().required(),
         Password: Yup.string().min(4).max(20).required(),
       });
 
