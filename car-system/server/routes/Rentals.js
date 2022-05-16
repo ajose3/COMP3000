@@ -45,7 +45,7 @@ router.get("/:CustomerID", async (req, res) => {
 
     const rentals = await Rentals.findAll({
         where: {
-            CustomerCustomerID: CustomerID
+            CustomerCustomerID: CustomerID,
         }
     });
     res.json(rentals);
@@ -84,8 +84,6 @@ router.post("/:RegPlate", validateToken, async (req, res) => {
     if (notEnd){
         return res.json({ error: "Vehicle Not Available on this day!" });
     }
-
-
 
     await Rentals.create(data);
     res.json(data);

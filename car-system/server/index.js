@@ -35,6 +35,10 @@ app.use("/feedback", feedbackRouter);
 const agentsRouter = require('./routes/Agents');
 app.use("/agents", agentsRouter);
 
+// Agents Router
+const billingRouter = require('./routes/billing');
+app.use("/billing", billingRouter);
+
 
 
 // Running on port 3001   *TO RUN SERVER, TYPE "cd server" in terminal, then "npm start"*

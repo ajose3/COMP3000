@@ -39,6 +39,7 @@ function ViewRentals() {
   return (
     <div style={{marginTop: "150px"}}>
         <h1>Your reservations: </h1>
+        <p>*(All Vehicles will be ready to collect on the Pick Up Date at 9am)</p>
         <Link to={{ pathname: `/profile/${authState.CustomerID}`}}>
             <button>Back to Profile</button>
         </Link>
@@ -47,8 +48,8 @@ function ViewRentals() {
             <tr>
                 <th style={{textAlign: "center"}}>No.</th>
                 <th style={{textAlign: "center"}}>Reservation Number:</th>
-                <th style={{textAlign: "center"}}>Start Date:</th>
-                <th style={{textAlign: "center"}}>End Date:</th>
+                <th style={{textAlign: "center"}}>Pick Up Date:</th>
+                <th style={{textAlign: "center"}}>Drop Off Date:</th>
                 <th style={{textAlign: "center"}}>Vehicle:</th>
                 <th style={{textAlign: "center"}}>Pick Up Location:</th>
                 <th style={{textAlign: "center"}}>Drop Off Location:</th>

@@ -24,6 +24,7 @@ import AdminViewCars from './pages/AdminViewCars';
 import AddEditVehicle from './pages/AddEditVehicle';
 import AdminRegisterAgent from './pages/AdminRegisterAgent';
 import EditCustomer from './pages/EditCustomer';
+import ContactPage from './pages/ContactPage';
 import { AuthContext } from './helpers/AuthContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -76,6 +77,7 @@ function App() {
         <div className="navbar">
           <h1> Rentals </h1>
           <Link to="/"> Home Page </Link>
+          <Link to="/contact"> Contact</Link>
           {!authState.status ? (
             <>
           <Link to="/login"> Login</Link>
@@ -85,7 +87,7 @@ function App() {
             <>
             <Link to={{ pathname: `/profile/${authState.CustomerID}`}} >Profile</Link>
             <p className='welcome'>welcome back {authState.FirstName}...</p>
-            <button onClick={logout}> Logout</button>
+            <button onClick={logout}><Link to="/"> Logout</Link></button>
             </>
           )}
           
@@ -102,6 +104,7 @@ function App() {
           <Route path="/feedback/:RegPlate" element={<Feedback />} exact />
           <Route path="/viewRentals/:CustomerID" element={<ViewRentals />} exact />
           <Route path="/editCustomer/:CustomerID" element={<EditCustomer />} exact />
+          <Route path="/contact" element={<ContactPage />} exact />
 
           <Route path="*" element={<PageNotFound />} exact /> 
 
