@@ -43,7 +43,7 @@ function AgentViewCars() {
       <div className="vehicle" key={key}>
         <div className="carMake">
           {value.RegPlate} : {value.CarMake} {value.CarModel} {value.CarYear} 
-          <button onClick={() => deleteVehicle(value.RegPlate)}>Delete Vehicle</button>
+          <button className="btn btn-delete" onClick={() => deleteVehicle(value.RegPlate)}>Delete Vehicle</button>
         </div>
         <div className="carImage"><img src={value.CarImage} height={200} width={350} /></div>
         <div className="carPrice">Price: £{value.CarPrice}</div>

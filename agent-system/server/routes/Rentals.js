@@ -50,6 +50,17 @@ router.get("/:CustomerID", async (req, res) => {
     res.json(rentals);
 });
 
+router.get("/getInfo/:RentingID", async (req, res) => {
+    const RentingID = req.params.RentingID;
+
+    const rentals = await Rentals.findAll({
+        where: {
+            RentingID: RentingID
+        }
+    });
+    res.json(rentals);
+});
+
 // Reserve a vehicle
 router.post("/:RegPlate", async (req, res) => {
 

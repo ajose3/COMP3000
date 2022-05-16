@@ -1,0 +1,41 @@
+input[type="date"]{
+    background-color: green;
+    padding: 10px;
+    position: relative;
+    font-family: "Roboto Mono", monospace;
+    color: white;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
+::-webkit-calendar-picker-indicator {
+    background-color: white;
+    padding: 5px;
+}
+
+
+.prepare {
+    width: 800px;
+    height: 500px;
+    border-radius: 10px;
+    flex-direction: column;
+    text-align: center;
+    margin: 50px;
+    margin-top: 50px;
+    border: 1px solid lightgray;
+    border-width: 10px;
+    border-top-style: solid;
+  }
+
+  select {
+      background: #0563af;
+      color: #fff;
+      padding: 10px;
+      width: 250px;
+      height: 50px;
+      border: none;
+      font-size: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.5);
+  }

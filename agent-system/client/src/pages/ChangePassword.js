@@ -29,6 +29,7 @@ function ChangePassword() {
                 navigate("/agentHome");
             }
         })
+        
     };
 
   return (
@@ -38,7 +39,7 @@ function ChangePassword() {
     <input type="password" placeholder="Old Password..." onChange={(event) => {setOldPassword(event.target.value);}} />
     <label>New Password:</label>
     <input type="password" placeholder="New Password..." onChange={(event) => {setNewPassword(event.target.value);}} />
-    <button onClick={changePassword}>Save Changes</button>
+    <button onClick={changePassword}>Change Password</button>
 </div>
   )
 }

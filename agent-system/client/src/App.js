@@ -16,6 +16,7 @@ import AgentAddVehicle from './pages/AgentAddVehicle';
 import ChangePassword from './pages/ChangePassword';
 import Feedback from './pages/Feedback';
 import Preparation from './pages/Preparation';
+import ViewBillings from './pages/ViewBillings';
 import { AuthContext } from "./helpers/AuthContext";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     AgentID: 0,
     status: false,
   });
+
 
   useEffect(() => {
     axios.get("http://localhost:5001/agents/auth", { 
@@ -55,16 +57,18 @@ function App() {
       <AuthContext.Provider value={{ authState, setAuthState }}>
       <Router>
       <div className="navbar">
-          <h1> Admin Rentals </h1>
-          <Link to="/agentHome">Home</Link>
+          <h1> Agents Rentals </h1>
           {!authState.status ? (
             <>
             <Link to="/"> Login </Link>
             </>
           ) : (
             <>
-            <button onClick={logout}> Logout</button>
-            <p className='welcome'>welcome back {authState.Username}</p>
+            <Link to="/agentHome">Home</Link>
+            <Link to="/allReservations">All Reservations</Link> 
+            <Link to="/agentViewCars">All Fleet</Link>
+            <p className='welcome'> Welcome back... {authState.Username}</p>
+            <button onClick={logout}><Link to="/"> Logout</Link></button>
             </>
           )}
 
@@ -83,6 +87,7 @@ function App() {
           <Route path="/changepassword" element={<ChangePassword />} exact />
           <Route path="/feedback" element={<Feedback />} exact />
           <Route path="/preparation/:RentingID" element={<Preparation />} exact />
+          <Route path="/viewBillings" element={<ViewBillings />} exact />
           
           <Route path="*" element={<PageNotFound />} exact /> 
 

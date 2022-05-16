@@ -1,11 +1,17 @@
-.addCar {
-    padding-top: 50px;
-    max-width: 400px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .addCar label {
-    text-align: left;
+
+
+  .addCar {
     display: block;
-    color: red;
+    width: 400px;
+    height: 600px;
+    border-radius: 10px;
+    flex-direction: column;
+    font-size: large;
+    text-align: center;
+    margin: 50px;
+    margin-top: 50px;
+    border: 1px solid lightgray;
+    border-width: 10px;
+    border-top-style: solid;
+    align-items: center;
   }

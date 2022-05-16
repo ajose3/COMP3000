@@ -40,6 +40,8 @@ function AllReservations() {
             <th style={{textAlign: "center"}}>Start Date:</th>
             <th style={{textAlign: "center"}}>End Date:</th>
             <th style={{textAlign: "center"}}>Vehicle:</th>
+            <th style={{textAlign: "center"}}>Pick Up Location:</th>
+            <th style={{textAlign: "center"}}>Drop Off Location:</th>
             <th style={{textAlign: "center"}}>Cost:</th>
             <th style={{textAlign: "center"}}>Email:</th>
             <th style={{textAlign: "center"}}>CustomerID:</th>
@@ -54,12 +56,14 @@ function AllReservations() {
                     <td>{item.StartDate}</td>
                     <td>{item.EndDate}</td>
                     <td><Link to={{ pathname: `/vehicle/${item.VehicleRegPlate}`}}>{item.VehicleRegPlate}</Link></td>
+                    <td>{item.PickUp}</td>
+                    <td>{item.DropOff}</td>
                     <td>£{item.Cost}</td>
                     <td>{item.Email}</td>
                     <td>{item.CustomerCustomerID}</td>
                     <td>
                         <button className="btn btn-delete" onClick={() => cancelReservation(item.RentingID)}>Cancel Rent</button>
-                        <button className="btn btn-view" onClick={() => {navigate(`/preparation/${item.RentingID}`)}}>Prepare</button>
+                        <button className="btn btn-view" onClick={() => {navigate(`/preparation/${item.RentingID}`)}}>Status</button>
                     </td>
                 </tr>
             );

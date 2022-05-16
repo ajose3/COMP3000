@@ -29,7 +29,9 @@ function AgentViewAgents() {
     }
 
   return (
-    <div style={{marginTop: "150px"}}>
+    <div>
+        <h1>Our Current Agents: </h1>
+    <div style={{marginTop: "15px"}}>
     <Link to="/registerAgent">
         <button className="btn btn-contact">Add Agent</button>
     </Link>
@@ -58,6 +60,7 @@ function AgentViewAgents() {
     <Link to={"/agentHome"}>
     <button className="btn btn-view">Back to menu</button>
     </Link>
+</div>
 </div>
   )
 }

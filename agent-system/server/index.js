@@ -39,6 +39,10 @@ app.use("/agents", agentsRouter);
 const preparationRouter = require('./routes/Preparation');
 app.use("/preparation", preparationRouter);
 
+// Agents Router
+const billingRouter = require('./routes/billing');
+app.use("/billing", billingRouter);
+
 
 // Running on port 5001   *TO RUN SERVER, TYPE "cd server" in terminal, then "npm start"*
 
